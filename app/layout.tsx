@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const fontPlusJakartaSans = Plus_Jakarta_Sans({
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontPlusJakartaSans.className} ${fontPlusJakartaSans.variable} antialiased`}
+        className={`${fontPlusJakartaSans.className} ${fontPlusJakartaSans.variable} antialiased overflow-x-hidden`}
       >
         {children}
       </body>
