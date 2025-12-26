@@ -8,7 +8,7 @@ const Misi = () => {
         Misi
       </p>
 
-      <div className="flex md:flex-row flex-col items-center px-24 gap-4">
+      <div className="flex flex-wrap justify-center items-center px-6 md:px-15 lg:px-24 gap-4">
         {misi1.map((item, idx) => (
           <div
             key={idx}
@@ -24,7 +24,7 @@ const Misi = () => {
           </div>
         ))}
       </div>
-      <div className="flex md:flex-row flex-col mt-3 items-center px-24 gap-4">
+      <div className="flex flex-wrap justify-center mt-3 items-center px-6 md:px-15 lg:px-24 gap-4">
         {misi2.map((item, idx) => (
           <div
             key={idx}

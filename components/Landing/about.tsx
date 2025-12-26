@@ -4,21 +4,21 @@ const About = () => {
   return (
     <>
       <div className="bg-[#a18f31] w-full h-3"></div>
-      <section className="bg-white w-full h-fit md:h-70">
-        <div className="flex md:flex-row flex-col justify-center items-center h-fit md:h-70 md:gap-24 gap-10 w-full">
-          <div className="md:pl-10">
+      <section className="bg-white w-full h-fit lg:h-70">
+        <div className="flex lg:flex-row flex-col justify-center items-center h-fit lg:h-70 lg:gap-24 gap-10 w-full">
+          <div className="lg:pl-10">
             <img
               src="/img/smk-logo.png"
-              className="md:w-60 w-50 mt-10 md:mt-0"
+              className="lg:w-60 w-50 mt-10 lg:mt-0"
               alt=""
             />
           </div>
-          <div className="px-14 mb-20 md:mb-0">
+          <div className="px-14 mb-20 lg:mb-0">
             <p className="text-[#333333] font-semibold text-lg">Tentang MPK</p>
-            <p className="text-[#333333] md:text-3xl text-2xl font-bold mt-2">
+            <p className="text-[#333333] lg:text-3xl text-2xl font-bold mt-2">
               MPK adalah Majelis Perwakilan Kelas
             </p>
-            <p className="text-[#333333] md:text-base text-sm mt-2 md:w-[600px]">
+            <p className="text-[#333333] lg:text-base text-sm mt-2 lg:w-[600px]">
               Merupakan organisasi siswa di sekolah yang berfungsi sebagai
               lembaga legislatif, mengawasi, mengevaluasi, dan membantu kinerja
               OSIS (Organisasi Siswa Intra Sekolah), serta menjadi penyalur

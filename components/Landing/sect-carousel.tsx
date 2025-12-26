@@ -44,7 +44,7 @@ const SectCarousel = () => {
         <p className="md:text-4xl relative z-10 text-2xl text-white font-bold mt-12 text-center">
           Info Seminar & Workshop
         </p>
-        <div className="flex mt-16 gap-6 items-center relative overflow-hidden">
+        <div className="flex mt-16 gap-6 items-center relative overflow-hidden z-10">
           <div
             className="text-white absolute left-5 cursor-pointer bg-[#333333]/50 p-2 rounded-full backdrop-blur-md"
             onClick={handlePrevImg}
@@ -65,7 +65,7 @@ const SectCarousel = () => {
               transition={{ duration: 0.5 }}
               key={`img-${currentImg}`}
               src={images[currentImg - 1].img}
-              className="md:w-[450px] md:h-[600px] w-[350px] h-[500px] object-cover object-center rounded-xl cursor-pointer"
+              className="lg:w-[450px] lg:h-[600px] w-[350px] h-[500px] object-cover object-center rounded-xl cursor-pointer"
               alt=""
             />
           </AnimatePresence>
@@ -90,7 +90,7 @@ const SectCarousel = () => {
             </div>
           </div>
         </div>
-        <p className="text-white relative z-10 font-bold md:text-2xl text-xl text-center w-[90%] mt-16 mb-16">
+        <p className="text-white relative z-10 font-bold lg:text-2xl md:text-xl text-lg text-center w-[90%] mt-16 mb-16">
           Tujuan seminar & workshop adalah untuk menyebarkan pengetahuan
           teoretis dan keterampilan prakits serga wawasan terkini kepada audiens
           luas melalui presentasi ahli.
