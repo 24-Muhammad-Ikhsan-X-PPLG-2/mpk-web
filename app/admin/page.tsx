@@ -1,0 +1,68 @@
+"use client";
+import DaftarSeminar from "@/components/Admin/daftar-seminar";
+import AdminLayout from "@/components/Admin/layout/AdminLayout";
+import TotalAdmin from "@/components/Admin/total-admin";
+import TotalMember from "@/components/Admin/total-member";
+import { Database, Wifi } from "lucide-react";
+
+const Dashboard = () => {
+  return (
+    <>
+      <AdminLayout>
+        <section className="w-full">
+          <div
+            className="grid grid-cols-1 lg:grid-cols-3 gap-4"
+            id="barisan-atas"
+          >
+            <div className="bg-white shadow w-full rounded-xl gap-2 flex items-center p-3">
+              <div className="bg-neutral-300 p-2 rounded-full">
+                <Wifi className="lg:size-8 size-6 text-primary" />
+              </div>
+              <div className="flex flex-col">
+                <p className="text-secondary font-semibold lg:text-lg text-sm">
+                  Status Server
+                </p>
+                <p className="text-green-500 font-medium lg:text-base text-xs">
+                  Online
+                </p>
+              </div>
+            </div>
+            <div className="bg-white shadow w-full rounded-xl gap-2 flex items-center p-3">
+              <div className="bg-neutral-300 p-2 rounded-full">
+                <Database className="lg:size-8 size-6 text-primary" />
+              </div>
+              <div className="flex flex-col">
+                <p className="text-secondary font-semibold lg:text-lg text-sm">
+                  Status DB
+                </p>
+                <p className="text-green-500 font-medium lg:text-base text-xs">
+                  Online
+                </p>
+              </div>
+            </div>
+            <TotalAdmin />
+          </div>
+        </section>
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
+          <TotalMember />
+          <div className="h-80  w-full relative">
+            <img
+              src="/img/ducati.jpg"
+              className="h-80 w-full object-cover object-center rounded-xl"
+              alt=""
+            />
+            <div className="absolute bottom-0 rounded-b-xl w-full h-[70%] bg-linear-to-t from-black to-transparent flex justify-center items-end">
+              <p className="text-lg text-white font-bold mb-10">
+                Ducati Panigale V4
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <DaftarSeminar />
+      </AdminLayout>
+    </>
+  );
+};
+
+export default Dashboard;

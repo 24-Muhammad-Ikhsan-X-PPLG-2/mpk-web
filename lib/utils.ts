@@ -1,0 +1,61 @@
+export const formatTanggalLengkap = (dateString: string) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
+
+export const formatKeSistemAman = (dateString: string) => {
+  const parts = dateString.split(/[-/]/); // Bisa split pakai - atau /
+
+  if (parts.length !== 3) return "Format tidak valid";
+
+  const [d, m, y] = parts;
+
+  // Memastikan bulan dan tanggal selalu 2 digit (padding)
+  const day = d.padStart(2, "0");
+  const month = m.padStart(2, "0");
+
+  return `${y}-${month}-${day}`;
+};
+
+export const formatTanggalIndoKeSistem = (dateString: string): string => {
+  // 1. Buat kamus bulan Indonesia
+  const bulanIndo: { [key: string]: string } = {
+    januari: "01",
+    februari: "02",
+    maret: "03",
+    april: "04",
+    mei: "05",
+    juni: "06",
+    juli: "07",
+    agustus: "08",
+    september: "09",
+    oktober: "10",
+    november: "11",
+    desember: "12",
+  };
+
+  // 2. Pecah string berdasarkan spasi
+  // Contoh: "29 Desember 2025" -> ["29", "Desember", "2025"]
+  const parts = dateString.trim().split(/\s+/);
+
+  if (parts.length !== 3) return "Format tidak valid";
+
+  const [d, m, y] = parts;
+
+  // 3. Ambil angka bulan dari kamus (ubah ke lowercase dulu)
+  const month = bulanIndo[m.toLowerCase()];
+
+  if (!month) return "Bulan tidak valid";
+
+  // 4. Pastikan tanggal 2 digit (misal "5" jadi "05")
+  const day = d.padStart(2, "0");
+
+  // 5. Gabungkan jadi YYYY-MM-DD
+  return `${y}-${month}-${day}`;
+};

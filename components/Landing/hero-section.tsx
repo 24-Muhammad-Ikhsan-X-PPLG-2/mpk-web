@@ -3,8 +3,8 @@ import { motion } from "motion/react";
 
 const HeroSection = () => {
   return (
-    <>
-      <div className="hidden lg:block -z-1 relative pointer-events-none w-full h-full">
+    <div className="relative w-full h-fit">
+      <div className="hidden lg:flex flex-col gap-32 inset-0 left-80 -z-1 absolute overflow-hidden pointer-events-none">
         {/* DESKTOP ONLY */}
         {/* Sebelah kiri */}
         <motion.div
@@ -15,7 +15,7 @@ const HeroSection = () => {
             repeat: Infinity,
             repeatType: "loop",
           }}
-          className="flex-max absolute -left-[150px] right-0 -z-99 -rotate-25 md:rotate-45 flex whitespace-nowrap"
+          className="flex-max -z-99 -rotate-25 md:rotate-45 flex whitespace-nowrap"
         >
           {Array.from({ length: 10 }).map((_, idx) => (
             <img
@@ -35,7 +35,7 @@ const HeroSection = () => {
             repeat: Infinity,
             repeatType: "loop",
           }}
-          className="flex-max absolute -right-[170px] bottom-0 -left-20 -z-99 -rotate-25 md:rotate-45 flex whitespace-nowrap"
+          className="flex-max -z-99 -rotate-25 md:rotate-45 flex whitespace-nowrap"
         >
           {Array.from({ length: 10 }).map((_, idx) => (
             <img
@@ -105,7 +105,7 @@ const HeroSection = () => {
           <p className="mt-3 text-4xl font-bold lg:text-7xl lg:w-150 w-100 text-wrap lg:leading-20 leading-12 text-[#333333]">
             MPK LETRIS INDONESIA 2
           </p>
-          <p className="text-[#333333] mt-3 font-bold lg:text-2xl text-lg text-wrap">
+          <p className="text-[#333333] mt-3 font-bold lg:text-2xl md:text-lg text-sm mix-blend-difference text-wrap">
             Majelis Permusyawaratan/Perwakilan Kelas
           </p>
           {/* <div className="flex gap-3 mt-3 items-center justify-center md:justify-start">
@@ -118,7 +118,7 @@ const HeroSection = () => {
         </div> */}
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

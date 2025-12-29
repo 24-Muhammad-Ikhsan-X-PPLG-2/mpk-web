@@ -1,3 +1,5 @@
+"use client";
+import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
 
 export const listNavbar = [
@@ -15,6 +17,7 @@ export const listNavbar = [
   },
 ];
 const Navbar = () => {
+  const { user } = useAuth();
   return (
     <>
       <nav className="bg-[#D4AF37] w-full lg:h-19.75 h-14 lg:p-2 p-1 px-4 lg:px-28 lg:px-24 fixed top-0 z-999">
@@ -35,11 +38,20 @@ const Navbar = () => {
               </p>
             ))}
           </div>
-          <Link href={"/signin"}>
-            <button className="bg-transparent border border-slate-200 w-20.5 h-10.75 text-lg shadow-2xl rounded-lg text-white font-semibold lg:block hidden cursor-pointer">
-              Login
-            </button>
-          </Link>
+          {user ? (
+            <Link href={"/admin"}>
+              <button className="bg-transparent border border-slate-200 w-fit h-10.75 p-2 text-lg shadow-2xl rounded-lg text-white font-semibold lg:block hidden cursor-pointer">
+                Dashboard
+              </button>
+            </Link>
+          ) : (
+            <Link href={"/signin"}>
+              <button className="bg-transparent border border-slate-200 w-fit h-10.75 p-2 text-lg shadow-2xl rounded-lg text-white font-semibold lg:block hidden cursor-pointer">
+                SignIn
+              </button>
+            </Link>
+          )}
+
           <button className="w-8 h-fit lg:hidden">
             <img src={"/img/button-nav.png"} className="w-8" />
           </button>
