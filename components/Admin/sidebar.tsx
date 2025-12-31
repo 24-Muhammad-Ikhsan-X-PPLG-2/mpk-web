@@ -26,7 +26,7 @@ const tabs = [
   {
     icon: <Users />,
     display: "Users",
-    link: "/",
+    link: "/admin/users",
   },
 ];
 
