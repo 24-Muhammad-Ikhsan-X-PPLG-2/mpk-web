@@ -1,14 +1,21 @@
 "use client";
 import AdminLayout from "@/components/Admin/layout/AdminLayout";
-import { formatKeSistemAman, formatTanggalIndoKeSistem } from "@/lib/utils";
+import {
+  formatKeSistemAman,
+  formatTanggalIndoKeSistem,
+  HapusGambarSeminar,
+  UploadGambarSeminar,
+} from "@/lib/client/utils";
 import { SeminarPhotoType } from "@/types/db";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Maximize, Pencil, X } from "lucide-react";
+import { Maximize, Pencil, SquareParking, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { editSeminar } from "./action";
+import ErrorModal from "@/components/error-modal";
+import { useRouter } from "next/navigation";
 
 type EditSeminarProps = {
   id: number;
@@ -31,6 +38,9 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fullscreenImg, setFullscreenImg] = useState(false);
+  const [errorEdit, setErrorEdit] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const { register, handleSubmit } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,22 +79,47 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
     nama,
     tgl,
   }) => {
+    let img_path = seminar.img_url;
+    setIsLoading(true);
+    if (selectedFile) {
+      const { error: ErrorUpload, path } = await UploadGambarSeminar(
+        selectedFile
+      );
+      if (ErrorUpload) {
+        setErrorEdit(ErrorUpload);
+        setIsLoading(false);
+        return;
+      }
+      if (!path) {
+        setErrorEdit("Unknown error");
+        setIsLoading(false);
+        return;
+      }
+      img_path = path;
+      const { error: ErrorHapus } = await HapusGambarSeminar(seminar.img_url);
+      if (ErrorHapus) {
+        setErrorEdit(ErrorHapus);
+        setIsLoading(false);
+        return;
+      }
+    }
     const formData = new FormData();
     formData.set("name", nama);
     formData.set("deskripsi", deskripsi);
     formData.set("tgl", tgl);
     formData.set("id", id.toString());
-    formData.set("img_path", seminar.img_url);
-    if (selectedFile) {
-      formData.set("img_file", selectedFile);
-    }
+    formData.set("img_path", img_path);
+
     const { error } = await editSeminar(formData);
     if (error) {
-      alert(error);
+      setErrorEdit(error);
     }
+    setIsLoading(false);
+    router.refresh();
   };
   return (
     <>
+      <ErrorModal errorDelete={errorEdit} setErrorDelete={setErrorEdit} />
       <AdminLayout
         pageName={`Seminar / Edit / ${seminar.name}`}
         title={`Edit Seminar "${seminar.name}"`}
@@ -206,8 +241,9 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
                     />
                   </div>
                   <button
+                    disabled={isLoading}
                     type="submit"
-                    className="lg:hidden block w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bg-primary bottom-5 right-5"
+                    className="lg:hidden block w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bg-primary bottom-5 right-5 disabled:bg-gray-500"
                   >
                     Simpan
                   </button>
@@ -216,7 +252,8 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
             </div>
             <button
               type="submit"
-              className="absolute lg:block hidden w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bg-primary bottom-5 right-5"
+              disabled={isLoading}
+              className="absolute lg:block hidden w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bg-primary bottom-5 right-5 disabled:bg-gray-500"
             >
               Simpan
             </button>

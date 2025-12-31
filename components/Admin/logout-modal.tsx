@@ -1,4 +1,5 @@
 "use client";
+import { createClient } from "@/lib/supabase/client";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
@@ -8,6 +9,8 @@ type LogoutModalProps = {
   show: boolean;
   setShow: Dispatch<SetStateAction<boolean>>;
 };
+
+const supabase = createClient();
 
 const LogoutModal: FC<LogoutModalProps> = ({ setShow, show }) => {
   const router = useRouter();
@@ -22,7 +25,14 @@ const LogoutModal: FC<LogoutModalProps> = ({ setShow, show }) => {
     return () => window.removeEventListener("mousedown", handleClickOutside);
   }, []);
   const handleLogout = async () => {
-    await fetch("/api/auth/logout");
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      alert("Login dlu!");
+      return;
+    }
+    await supabase.auth.signOut();
     router.push("/signin");
   };
   return (

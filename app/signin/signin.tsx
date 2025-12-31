@@ -41,6 +41,7 @@ const Signin = () => {
     password,
   }) => {
     setIsLoading(true);
+    setErrorSupabase("");
     const formData = new FormData();
     formData.set("email", email);
     formData.set("password", password);

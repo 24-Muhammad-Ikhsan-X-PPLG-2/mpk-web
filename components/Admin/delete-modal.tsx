@@ -12,6 +12,10 @@ import {
   useRef,
   useState,
 } from "react";
+import ErrorModal from "../error-modal";
+import { HapusGambarSeminar } from "@/lib/client/utils";
+import { PostgrestResponse } from "@supabase/supabase-js";
+import { SeminarPhotoType } from "@/types/db";
 
 export type deleteModalType = {
   id: string;
@@ -47,89 +51,92 @@ const DeleteModal: FC<DeleteModalProps> = ({ setShow, show }) => {
   }, [show]);
   const handleDeleteItem = async () => {
     if (!show) return;
-    const { data } = await supabase.from("seminar_photo").select();
-    if (data?.length == 1) {
+    const { data } = (await supabase
+      .from("seminar_photo")
+      .select()) as PostgrestResponse<SeminarPhotoType>;
+    if (!data) {
+      setErrorDelete("Tidak ada data untuk dihapus");
+      return;
+    }
+    if (data.length == 1) {
       setErrorDelete(
         "Tidak bisa dihapus, karena kalau ini dihapus ga ada foto seminar yang tersedia di web!"
       );
       setShow(null);
       return;
     }
+    const seminarIndex = data.findIndex((item) => item.id === show.id);
+    const seminar = data[seminarIndex];
     const { error } = await supabase
       .from("seminar_photo")
       .delete()
       .eq("id", show.id);
+    const { error: ErrorHapus } = await HapusGambarSeminar(seminar.img_url);
     setShow(null);
     if (error) {
       setErrorDelete(error.message);
     } else {
       setErrorDelete("");
     }
+    if (ErrorHapus) {
+      setErrorDelete(ErrorHapus);
+    } else {
+      setErrorDelete("");
+    }
   };
   return (
-    <AnimatePresence mode="wait">
-      {errorDelete !== "" && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="w-full h-full fixed top-0 left-0 flex justify-center items-center bg-black/50 backdrop-blur-sm px-4 z-9999"
-          onClick={() => setErrorDelete("")}
-        >
-          <div className="w-100 h-fit flex justify-center items-center p-4 bg-red-300 border border-red-600 rounded-xl">
-            <p className="text-red-600 text-center">{errorDelete}</p>
-          </div>
-        </motion.div>
-      )}
-
-      {show && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="w-full h-full fixed top-0 left-0 flex justify-center items-center bg-black/50 backdrop-blur-sm px-4 z-9999"
-        >
-          <div
-            className="bg-white w-100 h-fit rounded-xl shadow relative"
-            ref={modalRef}
+    <>
+      <ErrorModal errorDelete={errorDelete} setErrorDelete={setErrorDelete} />
+      <AnimatePresence mode="wait">
+        {show && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="w-full h-full fixed top-0 left-0 flex justify-center items-center bg-black/50 backdrop-blur-sm px-4 z-9999"
           >
             <div
-              id="head_modal_delete"
-              className="border-b border-gray-400 p-4 flex items-center justify-between"
+              className="bg-white w-100 h-fit rounded-xl shadow relative"
+              ref={modalRef}
             >
-              <p className="font-semibold text-lg">Delete Item</p>
-              <X
-                className="size-6 cursor-pointer"
-                onClick={() => setShow(null)}
-              />
-            </div>
-            <div
-              id="body_modal_delete"
-              className="p-4 border-b border-gray-400"
-            >
-              <p className="font-medium">Yakin mau delete item?</p>
-            </div>
-            <div
-              className="p-4 flex items-center justify-end gap-2"
-              id="footer_modal_delete"
-            >
-              <button
-                className="px-6 py-2 bg-red-500 text-white rounded-xl font-semibold cursor-pointer"
-                onClick={handleDeleteItem}
+              <div
+                id="head_modal_delete"
+                className="border-b border-gray-400 p-4 flex items-center justify-between"
               >
-                Seterah
-              </button>
-              <button
-                className="px-6 py-2 bg-gray-500 text-white rounded-xl font-semibold cursor-pointer"
-                onClick={() => setShow(null)}
+                <p className="font-semibold text-lg">Delete Item</p>
+                <X
+                  className="size-6 cursor-pointer"
+                  onClick={() => setShow(null)}
+                />
+              </div>
+              <div
+                id="body_modal_delete"
+                className="p-4 border-b border-gray-400"
               >
-                G
-              </button>
+                <p className="font-medium">Yakin mau delete item?</p>
+              </div>
+              <div
+                className="p-4 flex items-center justify-end gap-2"
+                id="footer_modal_delete"
+              >
+                <button
+                  className="px-6 py-2 bg-red-500 text-white rounded-xl font-semibold cursor-pointer"
+                  onClick={handleDeleteItem}
+                >
+                  Seterah
+                </button>
+                <button
+                  className="px-6 py-2 bg-gray-500 text-white rounded-xl font-semibold cursor-pointer"
+                  onClick={() => setShow(null)}
+                >
+                  G
+                </button>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

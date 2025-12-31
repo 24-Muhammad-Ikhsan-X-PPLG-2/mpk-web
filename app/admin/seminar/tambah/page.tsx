@@ -7,6 +7,9 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { AddSeminar } from "./action";
+import { createClient } from "@/lib/supabase/client";
+import ErrorModal from "@/components/error-modal";
+import { UploadGambarSeminar } from "@/lib/client/utils";
 
 const formSchema = z.object({
   nama: z.string().nonempty({
@@ -20,11 +23,14 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
+const supabase = createClient();
+
 const TambahSeminar = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fullscreenImg, setFullscreenImg] = useState(false);
-  const [errorImg, setErrorImg] = useState<string | null>(null);
+  const [errorImg, setErrorImg] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -52,9 +58,10 @@ const TambahSeminar = () => {
   }, []);
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
+    setErrorImg("");
     if (selectedFile) {
       if (!selectedFile.type.startsWith("image/")) {
-        alert("Tolong pilihnya file gambar!!!");
+        setErrorImg("File harus berupa gambar");
         return;
       }
       setSelectedFile(selectedFile);
@@ -67,19 +74,48 @@ const TambahSeminar = () => {
     nama,
     tgl,
   }) => {
+    setErrorImg("");
+    setIsLoading(true);
     if (!selectedFile) {
       setErrorImg("Image Seminar tidak boleh kosong!");
+      setIsLoading(false);
+      return;
+    }
+    const { path, error: ErrorUpload } = await UploadGambarSeminar(
+      selectedFile
+    );
+    if (ErrorUpload) {
+      setErrorImg(ErrorUpload);
+      setIsLoading(false);
+      return;
+    }
+    if (!path) {
+      setErrorImg("Unknown Error");
+      setIsLoading(false);
       return;
     }
     const formData = new FormData();
     formData.set("name", nama);
     formData.set("deskripsi", deskripsi);
     formData.set("tgl", tgl);
-    formData.set("img_file", selectedFile);
+    formData.set("img_path", path);
     const { error } = await AddSeminar(formData);
+    if (error) {
+      setErrorImg(error);
+      setIsLoading(false);
+      return;
+    }
+  };
+  const handleMaximizeImg = (state: boolean) => {
+    if (!previewUrl) {
+      setErrorImg("Masukkan gambar terlebih dahulu!");
+      return;
+    }
+    setFullscreenImg(state);
   };
   return (
     <>
+      <ErrorModal errorDelete={errorImg} setErrorDelete={setErrorImg} />
       <AdminLayout
         pageName={`Seminar / Tambah`}
         title={`Tambah Seminar`}
@@ -91,7 +127,7 @@ const TambahSeminar = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed top-0 left-0 z-99 w-full h-full bg-black/50 backdrop-blur-sm flex justify-center items-center"
+              className="fixed top-0 left-0 z-9999 w-full h-full bg-black/50 backdrop-blur-sm flex justify-center items-center"
             >
               <div
                 className="w-[450px] h-[600px] relative"
@@ -99,7 +135,7 @@ const TambahSeminar = () => {
               >
                 <div
                   className="absolute right-5 top-5 cursor-pointer"
-                  onClick={() => setFullscreenImg(false)}
+                  onClick={() => handleMaximizeImg(false)}
                 >
                   <X className="size-6 text-white mix-blend-difference" />
                 </div>
@@ -127,7 +163,7 @@ const TambahSeminar = () => {
                 <div className="w-fit h-fit relative">
                   <div
                     className="absolute bottom-2 left-2 bg-black/50 rounded-full backdrop-blur-sm p-2 cursor-pointer"
-                    onClick={() => setFullscreenImg(true)}
+                    onClick={() => handleMaximizeImg(true)}
                   >
                     <Maximize className="size-6 text-white" />
                   </div>
@@ -239,9 +275,10 @@ const TambahSeminar = () => {
             </div>
             <button
               type="submit"
-              className="absolute lg:block hidden w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bg-primary bottom-5 right-5"
+              disabled={isLoading}
+              className="absolute lg:block hidden w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bg-primary bottom-5 right-5 disabled:bg-gray-500 disabled:cursor-not-allowed transition-all duration-200"
             >
-              Simpan
+              {isLoading ? "Uploading..." : "Simpan"}
             </button>
           </form>
         </div>
