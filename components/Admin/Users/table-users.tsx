@@ -4,21 +4,70 @@ import { useAsyncEffect } from "@/hooks/useAsyncEffect";
 import { createClient } from "@/lib/supabase/client";
 import { ProfileType } from "@/types/db";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DeleteAkunServerAction } from "./action-delete";
 import ErrorModal from "@/components/error-modal";
 import ButtonDeleteUser from "./button-delete-user";
+import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
 const supabase = createClient();
 
 const TableUsers = () => {
   const [users, setUsers] = useState<ProfileType[] | null>(null);
   const [errorDelete, setErrorDelete] = useState("");
+  const usersRef = useRef<ProfileType[]>(null);
   const { isLoading } = useAsyncEffect(async () => {
     const { data } = await supabase.from("profiles").select();
     setUsers(data);
   }, []);
-
+  useEffect(() => {
+    usersRef.current = users;
+  }, [users]);
+  useEffect(() => {
+    const channel = supabase
+      .channel("profiles_realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "profiles" },
+        handlePayload
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+  const handlePayload = (
+    payload: RealtimePostgresChangesPayload<ProfileType>
+  ) => {
+    if (payload.eventType === "INSERT") {
+      const newItem = payload.new;
+      setUsers((prev) => {
+        if (prev) {
+          return [...prev, newItem];
+        }
+        return [newItem];
+      });
+    }
+    if (payload.eventType === "UPDATE") {
+      const newItem = payload.new;
+      setUsers((prev) => {
+        if (!prev) return [];
+        const index = prev.findIndex((item) => item.id === newItem.id);
+        if (index === -1) return prev;
+        const items = [...prev];
+        items[index] = newItem;
+        return items;
+      });
+    }
+    if (payload.eventType === "DELETE") {
+      const oldItem = payload.old;
+      setUsers((prev) => {
+        if (!prev) return prev;
+        const newItems = prev.filter((item) => item.id !== oldItem.id);
+        return newItems;
+      });
+    }
+  };
   return (
     <>
       <ErrorModal errorDelete={errorDelete} setErrorDelete={setErrorDelete} />

@@ -3,7 +3,7 @@ import React from "react";
 const About = () => {
   return (
     <>
-      <div className="bg-[#a18f31] w-full h-3"></div>
+      <div id="about" className="bg-[#a18f31] w-full h-3"></div>
       <section className="bg-white w-full h-fit lg:h-70">
         <div className="flex lg:flex-row flex-col justify-center items-center h-fit lg:h-70 lg:gap-24 gap-10 w-full">
           <div className="lg:pl-10">

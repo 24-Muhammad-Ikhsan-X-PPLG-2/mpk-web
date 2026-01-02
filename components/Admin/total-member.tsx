@@ -20,7 +20,11 @@ const TotalMember = () => {
         {!isLoading &&
           members?.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2">
-              <img src="/img/logo.png" className="w-12" alt="" />
+              <img
+                src={item.avatar_url ? item.avatar_url : "/img/logo.png"}
+                className="w-12"
+                alt=""
+              />
               <div className="flex flex-col ">
                 <p className="font-semibold">{item.username}</p>
                 <p className="font-medium text-gray-500 text-sm">{item.desc}</p>

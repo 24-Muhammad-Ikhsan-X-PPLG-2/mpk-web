@@ -40,6 +40,7 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
   const [fullscreenImg, setFullscreenImg] = useState(false);
   const [errorEdit, setErrorEdit] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
   const { register, handleSubmit } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
@@ -81,6 +82,7 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
   }) => {
     let img_path = seminar.img_url;
     setIsLoading(true);
+    setIsSuccess(false);
     if (selectedFile) {
       const { error: ErrorUpload, path } = await UploadGambarSeminar(
         selectedFile
@@ -116,6 +118,10 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
     }
     setIsLoading(false);
     router.refresh();
+    setIsSuccess(true);
+    setTimeout(() => {
+      setIsSuccess(false);
+    }, 1500);
   };
   return (
     <>
@@ -153,7 +159,7 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
             </motion.div>
           )}
         </AnimatePresence>
-        <div className="w-full h-full flex lg:justify-center">
+        <div className="w-full h-full flex min-h-[70vh] items-center justify-center">
           <form
             onSubmit={handleSubmit(handleOnEditSeminar)}
             className="bg-white lg:w-fit w-full h-fit rounded-xl shadow p-4 relative"
@@ -243,9 +249,11 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
                   <button
                     disabled={isLoading}
                     type="submit"
-                    className="lg:hidden block w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bg-primary bottom-5 right-5 disabled:bg-gray-500"
+                    className={`lg:hidden block w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bottom-5 right-5 disabled:bg-gray-500 transition duration-200 ${
+                      isSuccess ? "bg-green-500" : "bg-primary"
+                    }`}
                   >
-                    Simpan
+                    {isSuccess ? "Sukses" : "Simpan"}
                   </button>
                 </div>
               </div>
@@ -253,9 +261,11 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="absolute lg:block hidden w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bg-primary bottom-5 right-5 disabled:bg-gray-500"
+              className={`absolute transition duration-200 lg:block hidden w-fit text-white font-semibold rounded-xl cursor-pointer px-7 py-2 bottom-5 right-5 disabled:bg-gray-500 ${
+                isSuccess ? "bg-green-500" : "bg-primary"
+              }`}
             >
-              Simpan
+              {isSuccess ? "Sukses" : "Simpan"}
             </button>
           </form>
         </div>

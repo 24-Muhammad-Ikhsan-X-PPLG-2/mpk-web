@@ -153,7 +153,7 @@ const TambahSeminar = () => {
             </motion.div>
           )}
         </AnimatePresence>
-        <div className="w-full h-full flex lg:justify-center">
+        <div className="w-full h-full min-h-[70vh] flex items-center justify-center">
           <form
             onSubmit={handleSubmit(handleOnTambahSeminar)}
             className="bg-white lg:w-fit w-full h-fit rounded-xl shadow p-4 relative"

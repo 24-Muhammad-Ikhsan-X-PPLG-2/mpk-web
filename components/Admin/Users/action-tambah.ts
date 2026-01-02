@@ -1,45 +1,64 @@
 "use server";
 
-import { createClientAdmin } from "@/lib/supabase/server";
+import { createClient, createClientAdmin } from "@/lib/supabase/server";
 
 export async function TambahAkunServerAction(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  if (!name || !email || !password) {
+  const role = formData.get("role") as string;
+  if (!name || !email || !password || !role) {
     return {
       error: "Bad request!",
     };
   }
-  const supabase = await createClientAdmin();
   try {
-    const { data: IsNameNotUnique } = await supabase
-      .from("profiles")
-      .select()
-      .eq("username", name)
-      .maybeSingle();
-    const { data: IsEmailNotUnique } = await supabase
-      .from("profiles")
-      .select()
-      .eq("email", email)
-      .maybeSingle();
-    if (IsNameNotUnique) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
       return {
-        error: "Username sudah digunakan!",
+        error: "User belum login!",
       };
     }
-    if (IsEmailNotUnique) {
+    const { data: DataProfile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (!DataProfile) {
       return {
-        error: "Email sudah digunakan!",
+        error: "Akun tidak punya role. Akses dibatasi.",
       };
     }
-    const { error } = await supabase.auth.admin.createUser({
+    if (DataProfile.role !== "super-admin") {
+      return {
+        error: "Akun kamu tidak bisa memakai fitur ini. Akses dibatasi.",
+      };
+    }
+    const supabaseAdmin = await createClientAdmin();
+
+    const { data: existingUser, error: checkError } = await supabase
+      .from("profiles")
+      .select("email, username")
+      .or(`email.eq.${email},username.eq.${name}`)
+      .maybeSingle();
+
+    if (existingUser) {
+      if (existingUser.email === email)
+        return { error: "Email sudah digunakan!" };
+      if (existingUser.username === name)
+        return { error: "Username sudah digunakan!" };
+    }
+
+    const { error } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
       user_metadata: {
         username: name,
         desc: "I'm mpk broo!",
-        role: "admin",
+        role,
         email,
       },
       email_confirm: true,

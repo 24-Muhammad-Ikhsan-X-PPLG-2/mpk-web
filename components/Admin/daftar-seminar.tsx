@@ -96,7 +96,7 @@ const DaftarSeminar = () => {
           <table className="min-w-full divide-y-2 divide-gray-200">
             <thead className="ltr:text-left rtl:text-right">
               <tr className="*:font-medium *:text-gray-900">
-                <th className="px-3 py-2 whitespace-nowrap">Nama Seminar</th>
+                <th className="px-3 py-2 ">Nama Seminar</th>
                 <th className="px-3 py-2 whitespace-nowrap">Tgl</th>
                 <th className="px-3 py-2 ">Gambar</th>
                 <th className="px-3 py-2 whitespace-nowrap">Action</th>
@@ -105,7 +105,7 @@ const DaftarSeminar = () => {
             <tbody className="divide-y divide-gray-200">
               {seminars?.map((item, idx) => (
                 <tr key={idx} className="text-gray-900 *:first:font-medium">
-                  <td className="px-3 py-2 whitespace-nowrap">{item.name}</td>
+                  <td className="px-3 py-2 w-100">{item.name}</td>
                   <td className="px-3 py-2 whitespace-nowrap">{item.tgl}</td>
                   <td
                     className="px-3 py-2 "
@@ -115,7 +115,7 @@ const DaftarSeminar = () => {
                       Lihat
                     </button>
                   </td>
-                  <td className="px-3 py-2 flex gap-2 items-center">
+                  <td className="px-3 py-2 flex gap-2 items-center h-full">
                     <Link href={`/admin/seminar/edit/${item.id}`}>
                       <button className="bg-primary px-5 py-1.5 text-sm text-white font-semibold rounded cursor-pointer">
                         Edit

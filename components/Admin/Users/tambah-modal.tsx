@@ -27,6 +27,9 @@ const FormSchema = z.object({
   email: z.email({
     error: "Email tidak valid!",
   }),
+  role: z.string().nonempty({
+    error: "Role tidak boleh kosong!",
+  }),
   password: z.string().min(8, {
     error: "Password minimal 8 karakter!",
   }),
@@ -48,6 +51,7 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
     defaultValues: {
       email: "",
       name: "",
+      role: "",
       password: "",
     },
   });
@@ -69,6 +73,7 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
     email,
     name,
     password,
+    role,
   }) => {
     setIsLoading(true);
     setErrorSubmit("");
@@ -76,6 +81,7 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
     formData.set("name", name);
     formData.set("email", email);
     formData.set("password", password);
+    formData.set("role", role);
     const { error } = await TambahAkunServerAction(formData);
     if (error) {
       setErrorSubmit(error);
@@ -85,6 +91,7 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
     }
     setIsLoading(false);
     reset();
+    setShowModal(false);
   };
   useEffect(() => {
     if (!showModal) {
@@ -154,7 +161,7 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
                     Email
                   </label>
                   <input
-                    type="text"
+                    type="email"
                     id="email"
                     className={`md:w-100 w-full py-1.5 outline-none px-4 rounded-full border ${
                       errors.email
@@ -166,6 +173,34 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
                   />
                   {errors.email && (
                     <p className="text-red-600">{errors.email?.message}</p>
+                  )}
+                </div>
+                <div className="flex flex-col md:w-fit w-full">
+                  <label
+                    htmlFor="role"
+                    className={`${
+                      errors.role ? "text-red-600" : "text-secondary"
+                    } font-semibold mb-1 text-base`}
+                  >
+                    Role
+                  </label>
+                  <select
+                    id="role"
+                    className={`md:w-100 w-full py-1.5 outline-none px-2 rounded-full border ${
+                      errors.role
+                        ? "bg-red-300 border-red-600 placeholder:text-red-500 text-red-600"
+                        : "bg-slate-200 border-slate-600"
+                    }`}
+                    {...register("role")}
+                  >
+                    <option value="" defaultChecked>
+                      Pilih role
+                    </option>
+                    <option value="admin">Admin</option>
+                    <option value="super-admin">Super Admin</option>
+                  </select>
+                  {errors.role && (
+                    <p className="text-red-600">{errors.role?.message}</p>
                   )}
                 </div>
                 <div className="flex flex-col md:w-fit w-full">
@@ -214,10 +249,11 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
                 className="flex flex-col items-center mt-5 mb-6 w-full"
               >
                 <button
-                  className="md:w-100 w-full rounded-full text-center text-white font-semibold bg-green-500 py-2 cursor-pointer hover:bg-green-500/85 active:scale-90 transition duration-150"
+                  disabled={isLoading}
+                  className="md:w-100 w-full rounded-full text-center text-white font-semibold bg-green-500 py-2 cursor-pointer hover:bg-green-500/85 active:scale-90 transition duration-150 disabled:bg-gray-500"
                   type="submit"
                 >
-                  Simpan
+                  {isLoading ? "Process.." : "Simpan"}
                 </button>
               </div>
             </form>

@@ -1,19 +1,20 @@
 "use client";
 import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
+import MobileNav from "./mobile-nav";
 
 export const listNavbar = [
   {
-    display: "Keuangan",
-    link: "#",
+    display: "Tentang",
+    link: "#about",
   },
   {
-    display: "Publikasi",
-    link: "#",
+    display: "Seminar",
+    link: "#seminar",
   },
   {
-    display: "Surat",
-    link: "#",
+    display: "Visi & Misi",
+    link: "#visi",
   },
 ];
 const Navbar = () => {
@@ -24,18 +25,21 @@ const Navbar = () => {
         <div className="flex justify-between items-center w-full h-full">
           <div className="flex gap-2 items-center">
             <img src="/img/logo.png" className="lg:w-12 md:w-10 w-8" />
-            <p className="text-white lg:text-lg font-bold">MPK LETRIS 2</p>
+            <Link href={"#"} className="text-white lg:text-lg font-bold">
+              MPK LETRIS 2
+            </Link>
           </div>
           <div className="lg:flex gap-7 hidden">
             {listNavbar.map((item, idx) => (
-              <p
+              <Link
+                href={item.link}
                 key={idx}
                 className={`font-semibold ${
                   item.display == "Surat" ? "text-[#dacc86]" : "text-white"
                 }`}
               >
                 {item.display}
-              </p>
+              </Link>
             ))}
           </div>
           {user ? (
@@ -52,9 +56,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          <button className="w-8 h-fit lg:hidden">
-            <img src={"/img/button-nav.png"} className="w-8" />
-          </button>
+          <MobileNav />
         </div>
       </nav>
     </>

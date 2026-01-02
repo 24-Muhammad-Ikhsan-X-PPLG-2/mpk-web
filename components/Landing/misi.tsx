@@ -3,7 +3,10 @@ import React from "react";
 
 const Misi = () => {
   return (
-    <section className="mb-20 flex justify-center items-center flex-col w-screen">
+    <section
+      className="mb-20 flex justify-center items-center flex-col w-screen"
+      id="misi"
+    >
       <p className="text-[#333333] mb-10 text-6xl font-bold text-center">
         Misi
       </p>

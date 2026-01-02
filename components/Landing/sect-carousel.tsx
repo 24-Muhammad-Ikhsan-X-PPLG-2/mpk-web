@@ -46,7 +46,7 @@ const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
     }
   };
   return (
-    <section className="md:px-14 px-4">
+    <section className="md:px-14 px-4" id="seminar">
       <div className="bg-[#333333] flex flex-col items-center w-full h-fit md:rounded-[50px] rounded-xl relative">
         <p className="md:text-4xl relative z-10 text-2xl text-white font-bold mt-12 text-center">
           Info Seminar & Workshop
@@ -109,7 +109,7 @@ const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
         )}
         <p className="text-white relative z-10 font-bold lg:text-2xl md:text-xl text-lg text-center w-[90%] mt-16 mb-16">
           Tujuan seminar & workshop adalah untuk menyebarkan pengetahuan
-          teoretis dan keterampilan prakits serga wawasan terkini kepada audiens
+          teoretis dan keterampilan prakits serta wawasan terkini kepada audiens
           luas melalui presentasi ahli.
         </p>
         <img

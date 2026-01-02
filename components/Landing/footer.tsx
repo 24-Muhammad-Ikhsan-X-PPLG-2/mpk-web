@@ -17,10 +17,19 @@ const Footer = () => {
             2
           </p>
         </div>
-        <div className="self-center flex items-center gap-4">
-          <Instagram />
-          <Youtube />
-          <Tiktok />
+        <div className="self-center flex flex-col items-center justify-center">
+          <div className="flex items-center gap-4">
+            <Instagram />
+            <Youtube />
+            <Tiktok />
+          </div>
+          <a
+            href="https://forms.gle/XzPaxTpBZznd9nzD6"
+            target="_blank"
+            className="text-white text-lg font-semibold text-center mt-3"
+          >
+            Kritik & Saran
+          </a>
         </div>
       </div>
     </footer>

@@ -2,7 +2,10 @@ import React from "react";
 
 const Visi = () => {
   return (
-    <section className="h-120 flex flex-col justify-center items-center">
+    <section
+      className="h-120 flex flex-col justify-center items-center"
+      id="visi"
+    >
       <p className="text-[#333333] mb-10 text-6xl font-bold text-center">
         Visi
       </p>
