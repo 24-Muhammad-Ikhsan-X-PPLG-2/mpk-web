@@ -2,6 +2,7 @@
 import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
 import MobileNav from "./mobile-nav";
+import { useState } from "react";
 
 export const listNavbar = [
   {
@@ -19,8 +20,11 @@ export const listNavbar = [
 ];
 const Navbar = () => {
   const { user } = useAuth();
+  const [showMobileNav, setShowMobileNav] = useState(false);
   return (
     <>
+      <MobileNav show={showMobileNav} setShow={setShowMobileNav} />
+
       <nav className="bg-[#D4AF37] w-full lg:h-19.75 h-14 lg:p-2 p-1 px-4 lg:px-28 lg:px-24 fixed top-0 z-999">
         <div className="flex justify-between items-center w-full h-full">
           <div className="flex gap-2 items-center">
@@ -55,8 +59,12 @@ const Navbar = () => {
               </button>
             </Link>
           )}
-
-          <MobileNav />
+          <button
+            className="w-8 h-fit lg:hidden"
+            onClick={() => setShowMobileNav((prev) => !prev)}
+          >
+            <img src={"/img/button-nav.png"} className="w-8" />
+          </button>
         </div>
       </nav>
     </>

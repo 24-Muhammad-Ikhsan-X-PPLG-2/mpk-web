@@ -33,7 +33,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({
       />
       <div
         className={`pt-4 lg:pr-8 pr-3 w-screen min-h-screen pb-5 bg-neutral-200 pl-3 ${
-          showHalfSidebar ? "md:pl-24" : "md:pl-68"
+          showHalfSidebar ? "md:pl-24 pl-18" : "pl-68"
         }`}
       >
         <div
@@ -48,7 +48,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({
               {title}
             </p>
           </div>
-          <div className="bg-white shadow w-fit gap-2 cursor-pointer p-2 flex items-center rounded-full mr-4">
+          <div className="bg-white shadow w-fit gap-2 cursor-pointer p-2 lg:flex hidden items-center rounded-full mr-4">
             <img src="/img/logo.png" className="lg:w-10 w-7" alt="" />
           </div>
         </div>

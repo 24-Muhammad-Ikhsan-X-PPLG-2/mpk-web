@@ -127,7 +127,7 @@ const TambahSeminar = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed top-0 left-0 z-9999 w-full h-full bg-black/50 backdrop-blur-sm flex justify-center items-center"
+              className="fixed top-0 left-0 z-9999 w-full h-full bg-black/50 backdrop-blur-sm flex justify-center items-center px-4"
             >
               <div
                 className="w-[450px] h-[600px] relative"
@@ -203,19 +203,19 @@ const TambahSeminar = () => {
                   </p>
                 )}
               </div>
-              <div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
-                <div className="flex flex-col gap-3 w-fit">
-                  <div className="w-80 mt-1 flex flex-col gap-1">
+              <div className="grid lg:grid-cols-2 grid-cols-1 w-full lg:w-fit gap-5">
+                <div className="flex flex-col gap-3 w-full">
+                  <div className="lg:w-80 w-full mt-1 flex flex-col gap-1">
                     <label
                       htmlFor="name"
-                      className="text-secondary font-semibold text-lg"
+                      className="text-secondary font-semibold lg:text-lg text-base"
                     >
                       Nama Seminar<span className="text-red-600">*</span>
                     </label>
                     <input
                       id="name"
                       type="text"
-                      className={`outline-none border px-2 py-2 w-80 rounded-xl ${
+                      className={`outline-none border px-2 py-2 lg:w-80 w-full rounded-xl ${
                         errors.nama
                           ? "bg-red-300 border-red-600 placeholder:text-red-500 text-red-600"
                           : "bg-neutral-200 border-slate-400"
@@ -224,36 +224,38 @@ const TambahSeminar = () => {
                       {...register("nama")}
                     />
                     {errors.nama && (
-                      <p className="text-red-600">{errors.nama.message}</p>
+                      <p className="text-red-600 lg:text-base text-sm">
+                        {errors.nama.message}
+                      </p>
                     )}
                   </div>
-                  <div className="w-80 mt-1 flex flex-col gap-1">
+                  <div className="lg:w-80 w-full mt-1 flex flex-col gap-1">
                     <label
                       htmlFor="deskripsi"
-                      className="text-secondary font-semibold text-lg"
+                      className="text-secondary font-semibold lg:text-lg text-base"
                     >
                       Deskripsi Seminar
                     </label>
                     <textarea
                       id="deskripsi"
                       placeholder="Contoh: Seminar yg menjelaskan tentang seputaran pendidikan untuk menuju kesejahteraan."
-                      className="outline-none bg-neutral-200 border border-slate-400 px-2 py-2 w-80 rounded-xl min-h-40"
+                      className="outline-none bg-neutral-200 border border-slate-400 px-2 py-2 lg:w-80 w-full rounded-xl min-h-40"
                       {...register("deskripsi")}
                     ></textarea>
                   </div>
                 </div>
-                <div className="flex flex-col gap-3 w-fit">
-                  <div className="w-80 mt-1 flex flex-col gap-1">
+                <div className="flex flex-col gap-3 w-full">
+                  <div className="lg:w-80 w-full mt-1 flex flex-col gap-1">
                     <label
                       htmlFor="tgl"
-                      className="text-secondary font-semibold text-lg"
+                      className="text-secondary font-semibold lg:text-lg text-base"
                     >
                       Tanggal<span className="text-red-600">*</span>
                     </label>
                     <input
                       id="tgl"
                       type="date"
-                      className={`outline-none border px-2 py-2 w-80 rounded-xl ${
+                      className={`outline-none border px-2 py-2 lg:w-80 w-full rounded-xl ${
                         errors.tgl
                           ? "bg-red-300 border-red-600 placeholder:text-red-500 text-red-600"
                           : "bg-neutral-200 border-slate-400"
@@ -261,7 +263,9 @@ const TambahSeminar = () => {
                       {...register("tgl")}
                     />
                     {errors.tgl && (
-                      <p className="text-red-600">{errors.tgl.message}</p>
+                      <p className="text-red-600 lg:text-base text-sm">
+                        {errors.tgl.message}
+                      </p>
                     )}
                   </div>
                   <button

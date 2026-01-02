@@ -31,7 +31,7 @@ const PreviewModal: FC<PreviewModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="w-full h-full fixed left-0 top-0 flex justify-center items-center bg-black/50 backdrop-blur-sm z-9999"
+          className="w-full h-full fixed left-0 top-0 flex justify-center items-center bg-black/50 backdrop-blur-sm z-9999 px-4"
         >
           <div className="w-[450px] h-[600px] relative" ref={modalRef}>
             <div

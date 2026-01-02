@@ -92,7 +92,7 @@ const HeroSection = () => {
           </motion.div>
         </div>
         <div className="lg:order-2 relative w-fit">
-          <div className="absolute hidden md:block inset-0 backdrop-blur-md bg-white/5 rounded-full"></div>
+          <div className="absolute hidden md:block inset-0 backdrop-blur-md bg-white/50 rounded-full"></div>
           <img
             src={"/img/logo.png"}
             className="w-60 h-60 lg:w-100 lg:h-100 md:w-50 md:h-50 md:opacity-75 rounded-full shadow-2xl"

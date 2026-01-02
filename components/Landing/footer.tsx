@@ -9,8 +9,8 @@ const Footer = () => {
       <div className="flex w-full justify-between">
         <div>
           <div className="flex gap-4">
-            <img src="/img/logo.png" className="lg:w-24 w-16" alt="" />
-            <img src="/img/smk-logo.png" className="lg:w-24 w-16" alt="" />
+            <img src="/img/smk-logo.png" className="lg:w-24 w-12" alt="" />
+            <img src="/img/logo.png" className="lg:w-24 w-12" alt="" />
           </div>
           <p className="text-white mt-3 lg:text-base text-sm font-medium">
             &copy; {new Date().getFullYear().toString()} - MPK Letris Indonesia
@@ -26,7 +26,7 @@ const Footer = () => {
           <a
             href="https://forms.gle/XzPaxTpBZznd9nzD6"
             target="_blank"
-            className="text-white text-lg font-semibold text-center mt-3"
+            className="text-white md:text-lg text-sm font-semibold text-center mt-3"
           >
             Kritik & Saran
           </a>

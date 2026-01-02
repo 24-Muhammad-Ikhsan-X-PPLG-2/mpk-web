@@ -22,7 +22,7 @@ const TotalMember = () => {
             <div key={idx} className="flex items-center gap-2">
               <img
                 src={item.avatar_url ? item.avatar_url : "/img/logo.png"}
-                className="w-12"
+                className="lg:size-12 size-10"
                 alt=""
               />
               <div className="flex flex-col ">
@@ -37,7 +37,7 @@ const TotalMember = () => {
               key={idx}
               className="flex items-center gap-2 w-full bg-neutral-400 p-2 rounded-xl animate-pulse"
             >
-              <div className="w-12 h-12 rounded-full bg-gray-500" />
+              <div className="lg:size-12 size-10 rounded-full bg-gray-500" />
               <div className="flex flex-col ">
                 <div className="w-15 h-2 bg-gray-500 rounded-full"></div>
                 <div className="bg-gray-500 rounded-full w-24 h-2 mt-2"></div>

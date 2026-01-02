@@ -14,17 +14,17 @@ import LogoutModal from "./logout-modal";
 
 const tabs = [
   {
-    icon: <House />,
+    icon: <House className="size-5 md:size-6" />,
     display: "Dashboard",
     link: "/admin",
   },
   {
-    icon: <CirclePlus />,
+    icon: <CirclePlus className="size-5 md:size-6" />,
     display: "Tambah seminar",
     link: "/admin/seminar/tambah",
   },
   {
-    icon: <Users />,
+    icon: <Users className="size-5 md:size-6" />,
     display: "Users",
     link: "/admin/users",
   },
@@ -46,15 +46,15 @@ const Sidebar: FC<SidebarProps> = ({
     <>
       <LogoutModal setShow={setShowModalLogout} show={showModalLogout} />
       <div
-        className={`bg-secondary h-screen fixed hidden md:flex flex-col justify-between left-0 transition-all duration-150 z-999 ${
-          showHalfSidebar ? "w-20" : "w-64"
+        className={`bg-secondary h-screen fixed flex flex-col justify-between left-0 transition-all duration-150 z-999 ${
+          showHalfSidebar ? "md:w-20 w-15" : "w-64"
         }`}
       >
         <div className="h-full w-full">
           <div className="w-full h-[20%] flex justify-center items-center">
             <Link href={"/admin"}>
               {showHalfSidebar ? (
-                <img src="/img/logo.png" className="w-15" alt="" />
+                <img src="/img/logo.png" className="md:w-15 w-10" alt="" />
               ) : (
                 <p className="text-white font-bold text-2xl">
                   MPK <span className="text-primary">Admin</span>
@@ -64,7 +64,7 @@ const Sidebar: FC<SidebarProps> = ({
           </div>
           <div
             className={`w-full flex flex-col gap-5 justify-center items-center ${
-              !showHalfSidebar ? "pl-10" : "pl-6"
+              !showHalfSidebar ? "pl-10" : "md:pl-6 pl-4"
             }`}
           >
             {tabs.map((item, idx) => (
@@ -75,7 +75,7 @@ const Sidebar: FC<SidebarProps> = ({
               >
                 <div className="flex items-center w-full gap-2">
                   <div
-                    className={`size-6 ${
+                    className={`${
                       item.display.toLowerCase() == pageActive.toLowerCase()
                         ? "text-primary"
                         : "text-neutral-400"
@@ -96,7 +96,7 @@ const Sidebar: FC<SidebarProps> = ({
                   )}
                 </div>
                 <div
-                  className={`rounded-xl w-1 h-6 ${
+                  className={`rounded-xl w-1 md:h-6 h-5 ${
                     item.display.toLowerCase() == pageActive.toLowerCase()
                       ? "bg-primary"
                       : "bg-neutral-400"
@@ -109,14 +109,14 @@ const Sidebar: FC<SidebarProps> = ({
               onClick={() => setShowModalLogout(true)}
             >
               <div className="flex items-center w-full gap-2">
-                <div className={`size-6 text-neutral-400`}>
-                  <LogOut />
+                <div className={`text-neutral-400`}>
+                  <LogOut className="md:size-6 size-5" />
                 </div>
                 {!showHalfSidebar && (
                   <p className={`font-semibold text-neutral-400`}>Logout</p>
                 )}
               </div>
-              <div className={`rounded-xl w-1 h-6 bg-neutral-400`}></div>
+              <div className={`rounded-xl w-1 md:h-6 h-5 bg-neutral-400`}></div>
             </div>
           </div>
         </div>
