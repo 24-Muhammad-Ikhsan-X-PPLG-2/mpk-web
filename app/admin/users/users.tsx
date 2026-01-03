@@ -24,16 +24,18 @@ const Users = () => {
 
         <div className="flex gap-2">
           <button
-            className="text-white flex mt-3 cursor-pointer bg-green-500 px-5 text-center justify-center items-center py-2 rounded-xl hover:bg-green-500/85 transition duration-150 active:scale-90 font-semibold gap-1 md:text-base text-sm"
+            className="text-white flex mt-3 cursor-pointer bg-green-500 md:px-5 px-4 text-center justify-center items-center py-2 rounded-xl hover:bg-green-500/85 transition duration-150 active:scale-90 font-semibold gap-1 md:text-base text-sm"
             onClick={() => setShowModalTambah(true)}
           >
-            <Plus className="md:size-6 size-5" /> Tambah
+            <Plus className="md:size-6 sm:size-5 size-0 sm:block hidden" />{" "}
+            Tambah
           </button>
           <button
-            className="text-white flex mt-3 cursor-pointer bg-green-500 px-5 text-center justify-center items-center py-2 rounded-xl hover:bg-green-500/85 transition duration-150 active:scale-90 font-semibold gap-1 md:text-base text-sm"
+            className="text-white flex mt-3 cursor-pointer bg-green-500 md:px-5 px-4 text-center justify-center items-center py-2 rounded-xl hover:bg-green-500/85 transition duration-150 active:scale-90 font-semibold gap-1 md:text-base text-sm"
             onClick={() => setShowModalBuatKode(true)}
           >
-            <MailPlus className="md:size-6 size-5" /> Buat kode invite
+            <MailPlus className="md:size-6 sm:size-5 size-0 sm:block hidden" />{" "}
+            Buat kode invite
           </button>
         </div>
       </AdminLayout>
