@@ -17,6 +17,11 @@ const AdminLayout: FC<AdminLayoutProps> = ({
   title = "Main Dashboard",
 }) => {
   const [showHalfSidebar, setShowHalfSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(true);
+  const bodyClassName = `pt-4 lg:pr-8 pr-3 w-screen min-h-screen pb-5 bg-neutral-200 ${
+    showHalfSidebar ? "md:pl-24 pl-18" : "pl-68"
+  }`;
+  const bodyClassNameNoSidebar = `pt-4 lg:pr-8 pr-3 w-screen min-h-screen pb-5 bg-neutral-200 pl-3`;
   useEffect(() => {
     if (isMobile || isTablet) {
       setShowHalfSidebar(true);
@@ -27,15 +32,13 @@ const AdminLayout: FC<AdminLayoutProps> = ({
   return (
     <>
       <Sidebar
+        setShowSidebar={setShowSidebar}
+        showSidebar={showSidebar}
         setShowHalfSidebar={setShowHalfSidebar}
         showHalfSidebar={showHalfSidebar}
         pageActive={pageActive}
       />
-      <div
-        className={`pt-4 lg:pr-8 pr-3 w-screen min-h-screen pb-5 bg-neutral-200 pl-3 ${
-          showHalfSidebar ? "md:pl-24 pl-18" : "pl-68"
-        }`}
-      >
+      <div className={showSidebar ? bodyClassName : bodyClassNameNoSidebar}>
         <div
           className="w-full mb-5  flex justify-between items-center"
           id="header"

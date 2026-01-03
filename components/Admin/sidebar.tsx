@@ -34,22 +34,34 @@ type SidebarProps = {
   showHalfSidebar: boolean;
   setShowHalfSidebar: Dispatch<SetStateAction<boolean>>;
   pageActive?: string;
+  showSidebar: boolean;
+  setShowSidebar: Dispatch<SetStateAction<boolean>>;
 };
 
 const Sidebar: FC<SidebarProps> = ({
   showHalfSidebar,
   setShowHalfSidebar,
   pageActive = "Dashboard",
+  showSidebar,
+  setShowSidebar,
 }) => {
   const [showModalLogout, setShowModalLogout] = useState(false);
+  const sidebarClassName = `bg-secondary h-screen fixed flex flex-col justify-between left-0 transition-all duration-150 z-999 ${
+    showHalfSidebar ? "md:w-20 w-15" : "w-64"
+  }`;
+  const noSidebarClassname = `bg-secondary h-screen fixed flex flex-col justify-between left-0 transition-all duration-150 z-999 w-0 opacity-0 pointer-events-none`;
   return (
     <>
       <LogoutModal setShow={setShowModalLogout} show={showModalLogout} />
       <div
-        className={`bg-secondary h-screen fixed flex flex-col justify-between left-0 transition-all duration-150 z-999 ${
-          showHalfSidebar ? "md:w-20 w-15" : "w-64"
+        className={`fixed top-[50vh] -left-2 bg-secondary p-1 z-9999 rounded-r-full ${
+          showSidebar ? "w-0 pointer-events-none opacity-0" : "w-fit"
         }`}
+        onClick={() => setShowSidebar(true)}
       >
+        <ArrowRight className="size-5 text-white" />
+      </div>
+      <div className={showSidebar ? sidebarClassName : noSidebarClassname}>
         <div className="h-full w-full">
           <div className="w-full h-[20%] flex justify-center items-center">
             <Link href={"/admin"}>
@@ -132,6 +144,16 @@ const Sidebar: FC<SidebarProps> = ({
               <ArrowRight className="lg:size-8 size-6 text-secondary" />
             ) : (
               <ArrowLeft className="lg:size-8 size-6 text-secondary" />
+            )}
+          </div>
+          <div
+            className="bg-neutral-200 rounded-full p-1 cursor-pointer md:hidden block"
+            onClick={() => setShowSidebar((prev) => !prev)}
+          >
+            {showSidebar ? (
+              <ArrowLeft className="lg:size-8 size-6 text-secondary" />
+            ) : (
+              <ArrowRight className="lg:size-8 size-6 text-secondary" />
             )}
           </div>
         </div>
