@@ -123,13 +123,13 @@ const DeleteModal: FC<DeleteModalProps> = ({ setShow, show }) => {
                   className="px-6 py-2 bg-red-500 text-white rounded-xl font-semibold cursor-pointer"
                   onClick={handleDeleteItem}
                 >
-                  Seterah
+                  Iya
                 </button>
                 <button
                   className="px-6 py-2 bg-gray-500 text-white rounded-xl font-semibold cursor-pointer"
                   onClick={() => setShow(null)}
                 >
-                  G
+                  Tidak
                 </button>
               </div>
             </div>

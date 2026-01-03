@@ -2,6 +2,7 @@
 
 import { useLayout } from "@/contexts/LayoutContext";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
+import NextTopLoader from "nextjs-toploader";
 import { FC, PropsWithChildren } from "react";
 
 type LayoutHookProviderProps = PropsWithChildren & {
@@ -19,6 +20,7 @@ const LayoutHookProvider: FC<LayoutHookProviderProps> = ({
         fontPlusJakartaSans.variable
       } antialiased overflow-x-hidden ${noScroll ? "overflow-y-hidden" : ""}`}
     >
+      <NextTopLoader showSpinner={false} color="#333333" />
       {children}
     </body>
   );

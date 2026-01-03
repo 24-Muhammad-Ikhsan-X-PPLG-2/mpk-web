@@ -9,12 +9,16 @@ import { DeleteAkunServerAction } from "./action-delete";
 import ErrorModal from "@/components/error-modal";
 import ButtonDeleteUser from "./button-delete-user";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+import DeleteModal from "../delete-modal";
+import DeleteUserModal from "./delete-user-modal";
 
 const supabase = createClient();
 
 const TableUsers = () => {
   const [users, setUsers] = useState<ProfileType[] | null>(null);
   const [errorDelete, setErrorDelete] = useState("");
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState<string | null>(null);
   const usersRef = useRef<ProfileType[]>(null);
   const { isLoading } = useAsyncEffect(async () => {
     const { data } = await supabase.from("profiles").select();
@@ -71,6 +75,13 @@ const TableUsers = () => {
   return (
     <>
       <ErrorModal errorDelete={errorDelete} setErrorDelete={setErrorDelete} />
+      <DeleteUserModal
+        isLoading={isLoadingDelete}
+        setErrorDelete={setErrorDelete}
+        setIsLoading={setIsLoadingDelete}
+        setShow={setShowModalDelete}
+        show={showModalDelete}
+      />
       <div className="max-h-[90vh] overflow-x-auto bg-white rounded-xl">
         <table className="min-w-full divide-y-2 divide-gray-200">
           <thead className="sticky top-0 bg-white ltr:text-left rtl:text-right">
@@ -98,7 +109,8 @@ const TableUsers = () => {
                     </Link>
 
                     <ButtonDeleteUser
-                      setErrorDelete={setErrorDelete}
+                      isLoading={isLoadingDelete}
+                      setShowModalDelete={setShowModalDelete}
                       id={user.id}
                     />
                   </td>

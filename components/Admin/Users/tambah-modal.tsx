@@ -253,7 +253,7 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
                   className="md:w-100 w-full rounded-full text-center text-white font-semibold bg-green-500 py-2 cursor-pointer hover:bg-green-500/85 active:scale-90 transition duration-150 disabled:bg-gray-500"
                   type="submit"
                 >
-                  {isLoading ? "Process.." : "Simpan"}
+                  {isLoading ? "Process..." : "Simpan"}
                 </button>
               </div>
             </form>

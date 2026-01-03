@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { EditAkunServerAction } from "./action-edit";
 import ErrorModal from "@/components/error-modal";
+import Link from "next/link";
 
 type EditFormProps = {
   id: string;
@@ -150,11 +151,14 @@ const EditForm: FC<EditFormProps> = ({ id, userEdit, user }) => {
               </select>
               {errors.role ? (
                 <p className="text-red-600">{errors.role?.message}</p>
-              ) : (
-                <p className=" text-black font-normal hover:underline cursor-pointer">
+              ) : user.id === id ? (
+                <Link
+                  href={"/admin/user/change-password/"}
+                  className=" text-black font-normal hover:underline cursor-pointer"
+                >
                   Change password
-                </p>
-              )}
+                </Link>
+              ) : null}
             </div>
           </div>
           <div

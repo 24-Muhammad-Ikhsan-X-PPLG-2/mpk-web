@@ -1,5 +1,6 @@
 "use client";
 import DaftarSeminar from "@/components/Admin/daftar-seminar";
+import ImageWallpaper from "@/components/Admin/image-wallpaper";
 import AdminLayout from "@/components/Admin/layout/AdminLayout";
 import TotalAdmin from "@/components/Admin/total-admin";
 import TotalMember from "@/components/Admin/total-member";
@@ -45,18 +46,7 @@ const Dashboard = () => {
         </section>
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
           <TotalMember />
-          <div className="h-80  w-full relative">
-            <img
-              src="/img/ducati.jpg"
-              className="h-80 w-full object-cover object-center rounded-xl"
-              alt=""
-            />
-            <div className="absolute bottom-0 rounded-b-xl w-full h-[70%] bg-linear-to-t from-black to-transparent flex justify-center items-end">
-              <p className="text-lg text-white font-bold mb-10">
-                Ducati Panigale V4
-              </p>
-            </div>
-          </div>
+          <ImageWallpaper />
         </section>
 
         <DaftarSeminar />

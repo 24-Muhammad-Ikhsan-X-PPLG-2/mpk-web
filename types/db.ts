@@ -15,3 +15,15 @@ export type SeminarPhotoType = {
   tgl: string;
   img_url: string;
 };
+
+export type ConfigType<T> = {
+  id: number;
+  created_at: string;
+  name: string;
+  value: T;
+};
+
+export type ConfigImageWallpaperType = {
+  name: string;
+  image_url: string;
+};
