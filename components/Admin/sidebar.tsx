@@ -132,7 +132,7 @@ const Sidebar: FC<SidebarProps> = ({
             </div>
           </div>
         </div>
-        <div className="px-4 md:pb-4 pb-15 flex w-full justify-between items-center">
+        <div className="px-4 md:pb-4 pb-30 flex w-full justify-between items-center">
           {!showHalfSidebar && (
             <p className="text-white font-bold text-xs">Made By Ikhsan</p>
           )}
