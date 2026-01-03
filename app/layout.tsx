@@ -11,7 +11,8 @@ const fontPlusJakartaSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "MPK",
-  description: "Web Mpk",
+  description:
+    "Website MPK Letris Indonesia 2 berfungsi sebagai pusat informasi kegiatan dan program MPK, serta wadah penyaluran aspirasi siswa demi terciptanya lingkungan sekolah yang demokratis dan terbuka.",
 };
 
 export default function RootLayout({

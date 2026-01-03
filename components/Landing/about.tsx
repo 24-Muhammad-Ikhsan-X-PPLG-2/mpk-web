@@ -8,7 +8,7 @@ const About = () => {
         <div className="flex lg:flex-row flex-col justify-center items-center h-fit lg:h-70 lg:gap-24 gap-10 w-full">
           <div className="lg:pl-10">
             <img
-              src="/img/smk-logo.png"
+              src="/img/smk-logo.webp"
               className="lg:w-60 w-50 mt-10 lg:mt-0"
               alt=""
             />

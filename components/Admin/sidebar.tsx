@@ -54,7 +54,7 @@ const Sidebar: FC<SidebarProps> = ({
           <div className="w-full h-[20%] flex justify-center items-center">
             <Link href={"/admin"}>
               {showHalfSidebar ? (
-                <img src="/img/logo.png" className="md:w-15 w-10" alt="" />
+                <img src="/img/logo.webp" className="md:w-15 w-10" alt="" />
               ) : (
                 <p className="text-white font-bold text-2xl">
                   MPK <span className="text-primary">Admin</span>

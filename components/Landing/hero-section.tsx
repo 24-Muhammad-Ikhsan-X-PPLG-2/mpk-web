@@ -20,7 +20,7 @@ const HeroSection = () => {
           {Array.from({ length: 10 }).map((_, idx) => (
             <img
               key={idx}
-              src="/img/kiri3.png"
+              src="/img/kiri3.webp"
               className="w-screen h-auto shrink-0"
               alt="kiri"
             />
@@ -40,7 +40,7 @@ const HeroSection = () => {
           {Array.from({ length: 10 }).map((_, idx) => (
             <img
               key={idx}
-              src="/img/kiri3.png"
+              src="/img/kiri3.webp"
               className="w-screen h-auto shrink-0"
               alt="kiri"
             />
@@ -64,7 +64,7 @@ const HeroSection = () => {
             {Array.from({ length: 4 }).map((_, idx) => (
               <img
                 key={idx}
-                src="/img/kiri3.png"
+                src="/img/kiri3.webp"
                 className="w-100 shrink-0"
                 alt="kiri"
               />
@@ -84,7 +84,7 @@ const HeroSection = () => {
             {Array.from({ length: 4 }).map((_, idx) => (
               <img
                 key={idx}
-                src="/img/kiri3.png"
+                src="/img/kiri3.webp"
                 className="w-100 shrink-0"
                 alt="kiri"
               />
@@ -94,7 +94,7 @@ const HeroSection = () => {
         <div className="lg:order-2 relative w-fit">
           <div className="absolute hidden md:block inset-0 backdrop-blur-md bg-white/50 rounded-full"></div>
           <img
-            src={"/img/logo.png"}
+            src={"/img/logo.webp"}
             className="w-60 h-60 lg:w-100 lg:h-100 md:w-50 md:h-50 md:opacity-75 rounded-full shadow-2xl"
           />
         </div>

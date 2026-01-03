@@ -3,25 +3,6 @@ import { SeminarPhotoType } from "@/types/db";
 import { ArrowLeft, ArrowRight, Download } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { FC, useState } from "react";
-// const images = [
-//   "/img/seminar/seminar1.jpeg",
-//   "/img/seminar/seminar2.jpeg",
-//   "/img/seminar/seminar3.jpeg",
-// ];
-const images = [
-  {
-    item: 1,
-    img: "/img/seminar/seminar1.jpeg",
-  },
-  {
-    item: 2,
-    img: "/img/seminar/seminar2.jpeg",
-  },
-  {
-    item: 3,
-    img: "/img/seminar/seminar3.jpeg",
-  },
-];
 
 type SectCarouselProps = {
   img: SeminarPhotoType[] | null;
@@ -113,12 +94,12 @@ const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
           luas melalui presentasi ahli.
         </p>
         <img
-          src="/img/kanan-atas.png"
+          src="/img/kanan-atas.webp"
           className="absolute top-0 right-0 md:w-64 w-32  md:rounded-tr-[50px] rounded-tr-xl"
           alt=""
         />
         <img
-          src="/img/kiri-bawah.png"
+          src="/img/kiri-bawah.webp"
           className="absolute bottom-0 left-0 md:w-64 w-32 md:rounded-bl-[50px] rounded-bl-xl"
           alt=""
         />

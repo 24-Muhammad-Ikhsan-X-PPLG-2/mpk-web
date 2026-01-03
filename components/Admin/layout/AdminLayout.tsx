@@ -49,7 +49,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({
             </p>
           </div>
           <div className="bg-white shadow w-fit gap-2 cursor-pointer p-2 lg:flex hidden items-center rounded-full mr-4">
-            <img src="/img/logo.png" className="lg:w-10 w-7" alt="" />
+            <img src="/img/logo.webp" className="lg:w-10 w-7" alt="" />
           </div>
         </div>
         {children}

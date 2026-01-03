@@ -1,10 +1,15 @@
-"use client";
 import DaftarSeminar from "@/components/Admin/daftar-seminar";
 import ImageWallpaper from "@/components/Admin/image-wallpaper";
 import AdminLayout from "@/components/Admin/layout/AdminLayout";
 import TotalAdmin from "@/components/Admin/total-admin";
 import TotalMember from "@/components/Admin/total-member";
+import { appName } from "@/lib/server/utils";
 import { Database, Wifi } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: `${appName} - Dashboard admin`,
+};
 
 const Dashboard = () => {
   return (

@@ -21,7 +21,7 @@ const TotalMember = () => {
           members?.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2">
               <img
-                src={item.avatar_url ? item.avatar_url : "/img/logo.png"}
+                src={item.avatar_url ? item.avatar_url : "/img/logo.webp"}
                 className="lg:size-12 size-10"
                 alt=""
               />

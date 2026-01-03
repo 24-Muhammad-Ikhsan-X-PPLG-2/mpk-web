@@ -6,6 +6,7 @@ import Navbar from "@/components/Landing/navbar";
 import SectCarousel from "@/components/Landing/sect-carousel";
 import Visi from "@/components/Landing/visi";
 import { createClient } from "@/lib/supabase/server";
+import { Metadata } from "next";
 
 const Home = async () => {
   const supabase = await createClient();

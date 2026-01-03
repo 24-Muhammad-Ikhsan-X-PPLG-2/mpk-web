@@ -61,3 +61,5 @@ export const formatTanggalIndoKeSistem = (dateString: string): string => {
   // 5. Gabungkan jadi YYYY-MM-DD
   return `${y}-${month}-${day}`;
 };
+
+export const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "MPK";

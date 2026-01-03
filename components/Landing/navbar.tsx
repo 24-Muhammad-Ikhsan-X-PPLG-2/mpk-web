@@ -28,7 +28,7 @@ const Navbar = () => {
       <nav className="bg-[#D4AF37] w-full lg:h-19.75 h-14 lg:p-2 p-1 px-4 lg:px-28 lg:px-24 fixed top-0 z-999">
         <div className="flex justify-between items-center w-full h-full">
           <div className="flex gap-2 items-center">
-            <img src="/img/logo.png" className="lg:w-12 md:w-10 w-8" />
+            <img src="/img/logo.webp" className="lg:w-12 md:w-10 w-8" />
             <Link href={"#"} className="text-white lg:text-lg font-bold">
               MPK LETRIS 2
             </Link>
@@ -63,7 +63,7 @@ const Navbar = () => {
             className="w-8 h-fit lg:hidden"
             onClick={() => setShowMobileNav((prev) => !prev)}
           >
-            <img src={"/img/button-nav.png"} className="w-8" />
+            <img src={"/img/button-nav.webp"} className="w-8" />
           </button>
         </div>
       </nav>

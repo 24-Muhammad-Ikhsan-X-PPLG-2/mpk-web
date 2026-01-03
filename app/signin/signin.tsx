@@ -67,7 +67,7 @@ const Signin = () => {
         <div className="flex flex-col justify-center items-center w-full md:w-auto px-4 md:px-0">
           <div className="" id="header">
             <img
-              src="/img/logo.png"
+              src="/img/logo.webp"
               className="block md:hidden w-32 mb-5 mx-auto"
               alt=""
             />
@@ -163,7 +163,7 @@ const Signin = () => {
         </div>
         <div className="hidden md:block">
           <img
-            src="/img/login-img/photo-pintu.jpg"
+            src="/img/login-img/photo-pintu.webp"
             className="w-[320px] h-100 rounded-xl object-cover object-center"
             alt=""
           />
