@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { CreateAccountServerAction } from "./action-create-account";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const formSchema = z.object({
   username: z
@@ -190,7 +191,9 @@ const CreateAccount: FC<CreateAccountProps> = ({ code }) => {
             </div>
           </div>
           <div className="hidden md:block">
-            <img
+            <Image
+              height={400}
+              width={320}
               src="/img/login-img/photo-buat-akun.webp"
               className="w-[320px] h-100 rounded-xl object-cover object-center"
               alt=""

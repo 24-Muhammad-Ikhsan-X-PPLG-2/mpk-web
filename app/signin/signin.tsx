@@ -8,6 +8,7 @@ import z from "zod";
 import { SignIn } from "./action";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
 
 const FormLoginSchema = z.object({
   email: z.email({
@@ -166,7 +167,9 @@ const Signin = () => {
           </div>
         </div>
         <div className="hidden md:block">
-          <img
+          <Image
+            height={400}
+            width={320}
             src="/img/login-img/photo-pintu.webp"
             className="w-[320px] h-100 rounded-xl object-cover object-center"
             alt=""
