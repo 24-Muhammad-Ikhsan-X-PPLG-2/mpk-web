@@ -45,10 +45,14 @@ const Signin = () => {
     const formData = new FormData();
     formData.set("email", email);
     formData.set("password", password);
-    const result = await SignIn(formData);
-    if (result?.error) {
+    const { error } = await SignIn(formData);
+    if (error) {
       setIsLoading(false);
-      setErrorSupabase(result.error);
+      if (error === "Invalid login credentials") {
+        setErrorSupabase("Email atau password salah!");
+      } else {
+        setErrorSupabase(error);
+      }
     }
   };
   const handleTogglePassword = () => {

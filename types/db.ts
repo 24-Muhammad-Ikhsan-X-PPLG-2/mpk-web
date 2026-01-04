@@ -27,3 +27,12 @@ export type ConfigImageWallpaperType = {
   name: string;
   image_url: string;
 };
+
+export type InviteCodeType = {
+  id: number;
+  created_at: string;
+  code: string;
+  person: string;
+  expires_at: string;
+  is_used: string;
+};

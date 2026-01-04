@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import LogoutModal from "./logout-modal";
 
 const tabs = [
