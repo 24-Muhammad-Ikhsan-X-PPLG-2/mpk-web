@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { RevalidatePathServerAction } from "./action-revalidate-path";
 
 type LogoutModalProps = {
   show: boolean;
@@ -46,6 +47,8 @@ const LogoutModal: FC<LogoutModalProps> = ({ setShow, show }) => {
       return;
     }
     await supabase.auth.signOut();
+    await RevalidatePathServerAction();
+
     router.push("/signin");
   };
   const handleCloseModal = () => {

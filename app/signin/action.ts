@@ -22,7 +22,9 @@ export async function SignIn(form: FormData) {
       return { error: error.message };
     }
     revalidatePath("/", "layout");
-    return redirect("/admin");
+    return {
+      error: null,
+    };
   } catch (error) {
     if (error instanceof Error) {
       return {
