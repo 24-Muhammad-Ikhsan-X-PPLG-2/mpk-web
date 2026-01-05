@@ -16,6 +16,8 @@ import z from "zod";
 import { editSeminar } from "./action";
 import ErrorModal from "@/components/error-modal";
 import { useRouter } from "next/navigation";
+import imageCompression from "browser-image-compression";
+import Image from "next/image";
 
 type EditSeminarProps = {
   id: number;
@@ -88,8 +90,23 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
     setIsLoading(true);
     setIsSuccess(false);
     if (selectedFile) {
+      let fileToUpload = selectedFile;
+      if (selectedFile.type !== "image/webp") {
+        console.log("Mengompres gambar...");
+        const compressBlob = await imageCompression(selectedFile, {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 1200,
+          useWebWorker: true,
+          fileType: "image/webp",
+        });
+        console.log("Pengompresan gambar selesai.");
+        const compressedFile = new File([compressBlob], "image.webp", {
+          type: "image/webp",
+        });
+        fileToUpload = compressedFile;
+      }
       const { error: ErrorUpload, path } = await UploadGambarSeminar(
-        selectedFile
+        fileToUpload
       );
       if (ErrorUpload) {
         setErrorEdit(ErrorUpload);
@@ -191,7 +208,9 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
                   onChange={handleFileChange}
                 />
 
-                <img
+                <Image
+                  width={225}
+                  height={300}
                   src={previewUrl ? previewUrl : seminar.img_url}
                   className="w-[225px] h-[300px] object-cover object-center rounded-xl"
                   alt=""
@@ -275,7 +294,11 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
                       isSuccess ? "bg-green-500" : "bg-primary"
                     }`}
                   >
-                    {isSuccess ? "Sukses" : "Simpan"}
+                    {isLoading
+                      ? "Memproses..."
+                      : isSuccess
+                      ? "Sukses"
+                      : "Simpan"}
                   </button>
                 </div>
               </div>
@@ -287,7 +310,7 @@ const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
                 isSuccess ? "bg-green-500" : "bg-primary"
               }`}
             >
-              {isSuccess ? "Sukses" : "Simpan"}
+              {isLoading ? "Memproses..." : isSuccess ? "Sukses" : "Simpan"}
             </button>
           </form>
         </div>

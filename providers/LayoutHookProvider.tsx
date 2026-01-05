@@ -20,7 +20,7 @@ const LayoutHookProvider: FC<LayoutHookProviderProps> = ({
         fontPlusJakartaSans.variable
       } antialiased overflow-x-hidden ${noScroll ? "overflow-y-hidden" : ""}`}
     >
-      <NextTopLoader showSpinner={false} color="#333333" />
+      <NextTopLoader showSpinner={false} color="#FFA240" />
       {children}
     </body>
   );

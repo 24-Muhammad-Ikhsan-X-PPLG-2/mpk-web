@@ -3,7 +3,14 @@ import { createClient } from "@/lib/supabase/client";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 type LogoutModalProps = {
   show: boolean;
@@ -15,9 +22,14 @@ const supabase = createClient();
 const LogoutModal: FC<LogoutModalProps> = ({ setShow, show }) => {
   const router = useRouter();
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(e.target as Node) &&
+        !isLoading
+      ) {
         setShow(false);
       }
     };
@@ -25,15 +37,21 @@ const LogoutModal: FC<LogoutModalProps> = ({ setShow, show }) => {
     return () => window.removeEventListener("mousedown", handleClickOutside);
   }, []);
   const handleLogout = async () => {
+    setIsLoading(true);
     const {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      alert("Login dlu!");
+      alert("Login terlebih dahulu!");
       return;
     }
     await supabase.auth.signOut();
+    setIsLoading(false);
     router.push("/signin");
+  };
+  const handleCloseModal = () => {
+    if (isLoading) return;
+    setShow(false);
   };
   return (
     <AnimatePresence mode="wait">
@@ -53,10 +71,7 @@ const LogoutModal: FC<LogoutModalProps> = ({ setShow, show }) => {
               className="border-b border-gray-400 p-4 flex items-center justify-between"
             >
               <p className="font-semibold text-lg">Logout</p>
-              <X
-                className="size-6 cursor-pointer"
-                onClick={() => setShow(false)}
-              />
+              <X className="size-6 cursor-pointer" onClick={handleCloseModal} />
             </div>
             <div
               id="body_modal_delete"
@@ -69,12 +84,14 @@ const LogoutModal: FC<LogoutModalProps> = ({ setShow, show }) => {
               id="footer_modal_delete"
             >
               <button
-                className="px-6 py-2 bg-red-500 text-white rounded-xl font-semibold cursor-pointer"
+                disabled={isLoading}
+                className="px-6 py-2 bg-red-500 text-white rounded-xl font-semibold cursor-pointer disabled:bg-gray-500"
                 onClick={handleLogout}
               >
-                Iya
+                {isLoading ? "Memproses..." : "Iya"}
               </button>
               <button
+                disabled={isLoading}
                 className="px-6 py-2 bg-gray-500 text-white rounded-xl font-semibold cursor-pointer"
                 onClick={() => setShow(false)}
               >

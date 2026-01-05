@@ -3,6 +3,7 @@ import useAuth from "@/hooks/useAuth";
 import Link from "next/link";
 import MobileNav from "./mobile-nav";
 import { useState } from "react";
+import Image from "next/image";
 
 export const listNavbar = [
   {
@@ -28,7 +29,13 @@ const Navbar = () => {
       <nav className="bg-[#D4AF37] w-full lg:h-19.75 h-14 lg:p-2 p-1 px-4 lg:px-28 lg:px-24 fixed top-0 z-999">
         <div className="flex justify-between items-center w-full h-full">
           <div className="flex gap-2 items-center">
-            <img src="/img/logo.webp" className="lg:w-12 md:w-10 w-8" />
+            <Image
+              alt="Logo"
+              width={48}
+              height={48}
+              src="/img/logo.webp"
+              className="lg:w-12 md:w-10 w-8"
+            />
             <Link href={"#"} className="text-white lg:text-lg font-bold">
               MPK LETRIS 2
             </Link>

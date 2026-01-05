@@ -11,22 +11,37 @@ export async function editSeminar(formData: FormData) {
   const tgl = formatTanggalLengkap(formData.get("tgl") as string);
   const id = formData.get("id") as string;
   const pathImg = formData.get("img_path") as string;
-
-  const { error } = await supabase
-    .from("seminar_photo")
-    .update({
-      name,
-      deskripsi,
-      tgl,
-      img_url: pathImg,
-    })
-    .eq("id", id);
-  if (error) {
+  if (!name || !deskripsi || !tgl || !id || !pathImg) {
     return {
-      error: error.message,
+      error: "Bad request!",
     };
   }
-  return {
-    error: null,
-  };
+  try {
+    const { error } = await supabase
+      .from("seminar_photo")
+      .update({
+        name,
+        deskripsi,
+        tgl,
+        img_url: pathImg,
+      })
+      .eq("id", id);
+    if (error) {
+      return {
+        error: error.message,
+      };
+    }
+    return {
+      error: null,
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        error: error.message,
+      };
+    }
+    return {
+      error: "Unexpected error!",
+    };
+  }
 }

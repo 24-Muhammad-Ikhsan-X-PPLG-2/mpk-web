@@ -10,6 +10,9 @@ import { AddSeminar } from "./action";
 import { createClient } from "@/lib/supabase/client";
 import ErrorModal from "@/components/error-modal";
 import { UploadGambarSeminar } from "@/lib/client/utils";
+import imageCompression from "browser-image-compression";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   nama: z.string().nonempty({
@@ -29,6 +32,7 @@ const TambahSeminar = () => {
   const [fullscreenImg, setFullscreenImg] = useState(false);
   const [errorImg, setErrorImg] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -79,8 +83,23 @@ const TambahSeminar = () => {
       setIsLoading(false);
       return;
     }
+    let fileToUpload = selectedFile;
+    if (selectedFile.type !== "image/webp") {
+      console.log("Mengompres gambar...");
+      const compressBlob = await imageCompression(selectedFile, {
+        maxSizeMB: 0.8,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+        fileType: "image/webp",
+      });
+      console.log("Pengompresan gambar selesai.");
+      const compressedFile = new File([compressBlob], "image.webp", {
+        type: "image/webp",
+      });
+      fileToUpload = compressedFile;
+    }
     const { path, error: ErrorUpload } = await UploadGambarSeminar(
-      selectedFile
+      fileToUpload
     );
     if (ErrorUpload) {
       setErrorImg(ErrorUpload);
@@ -103,6 +122,7 @@ const TambahSeminar = () => {
       setIsLoading(false);
       return;
     }
+    router.push("/admin");
   };
   const handleMaximizeImg = (state: boolean) => {
     if (!previewUrl) {
@@ -178,22 +198,36 @@ const TambahSeminar = () => {
                     accept="image/*"
                     onChange={handleFileChange}
                   />
-
-                  <img
-                    src={
-                      previewUrl
-                        ? previewUrl
-                        : "https://placehold.co/450x600?text=Placeholder"
-                    }
-                    className="w-[225px] h-[300px] object-cover object-center rounded-xl"
-                    alt=""
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src =
-                        "https://placehold.co/450x600?text=Not+Found";
-                    }}
-                    loading="lazy"
-                  />
+                  {previewUrl ? (
+                    <Image
+                      width={450}
+                      height={600}
+                      src={previewUrl}
+                      className="w-[225px] h-[300px] object-cover object-center rounded-xl"
+                      alt=""
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src =
+                          "https://placehold.co/450x600?text=Not+Found";
+                      }}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <Image
+                      width={450}
+                      height={600}
+                      src={"https://placehold.co/450x600?text=Placeholder"}
+                      className="w-[225px] h-[300px] object-cover object-center rounded-xl"
+                      alt=""
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src =
+                          "https://placehold.co/450x600?text=Not+Found";
+                      }}
+                      loading="lazy"
+                      unoptimized
+                    />
+                  )}
                 </div>
                 {errorImg && (
                   <p className="text-red-600 text-wrap mt-1 flex justify-center items-center max-w-[225px]">

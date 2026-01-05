@@ -1,4 +1,4 @@
-import React from "react";
+import Image from "next/image";
 
 const About = () => {
   return (
@@ -7,7 +7,9 @@ const About = () => {
       <section className="bg-white w-full h-fit lg:h-70">
         <div className="flex lg:flex-row flex-col justify-center items-center h-fit lg:h-70 lg:gap-24 gap-10 w-full">
           <div className="lg:pl-10">
-            <img
+            <Image
+              width={240}
+              height={240}
               src="/img/smk-logo.webp"
               className="lg:w-60 w-50 mt-10 lg:mt-0"
               alt=""

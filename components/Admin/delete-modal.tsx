@@ -33,6 +33,7 @@ const DeleteModal: FC<DeleteModalProps> = ({ setShow, show }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [errorDelete, setErrorDelete] = useState("");
   const { changeNoScroll } = useLayout();
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
@@ -51,11 +52,13 @@ const DeleteModal: FC<DeleteModalProps> = ({ setShow, show }) => {
   }, [show]);
   const handleDeleteItem = async () => {
     if (!show) return;
+    setIsLoading(true);
     const { data } = (await supabase
       .from("seminar_photo")
       .select()) as PostgrestResponse<SeminarPhotoType>;
     if (!data) {
       setErrorDelete("Tidak ada data untuk dihapus");
+      setIsLoading(false);
       return;
     }
     if (data.length == 1) {
@@ -63,6 +66,7 @@ const DeleteModal: FC<DeleteModalProps> = ({ setShow, show }) => {
         "Tidak bisa dihapus, karena kalau ini dihapus ga ada foto seminar yang tersedia di web!"
       );
       setShow(null);
+      setIsLoading(false);
       return;
     }
     const seminarIndex = data.findIndex((item) => item.id === show.id);
@@ -73,6 +77,7 @@ const DeleteModal: FC<DeleteModalProps> = ({ setShow, show }) => {
       .eq("id", show.id);
     const { error: ErrorHapus } = await HapusGambarSeminar(seminar.img_url);
     setShow(null);
+    setIsLoading(false);
     if (error) {
       setErrorDelete(error.message);
     } else {
@@ -120,12 +125,14 @@ const DeleteModal: FC<DeleteModalProps> = ({ setShow, show }) => {
                 id="footer_modal_delete"
               >
                 <button
-                  className="px-6 py-2 bg-red-500 text-white rounded-xl font-semibold cursor-pointer"
+                  disabled={isLoading}
+                  className="px-6 py-2 bg-red-500 text-white rounded-xl font-semibold cursor-pointer disabled:bg-gray-500"
                   onClick={handleDeleteItem}
                 >
-                  Iya
+                  {isLoading ? "Memproses..." : "Iya"}
                 </button>
                 <button
+                  disabled={isLoading}
                   className="px-6 py-2 bg-gray-500 text-white rounded-xl font-semibold cursor-pointer"
                   onClick={() => setShow(null)}
                 >

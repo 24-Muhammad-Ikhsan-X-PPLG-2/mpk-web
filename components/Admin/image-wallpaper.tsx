@@ -1,9 +1,13 @@
 "use client";
 
+import Image from "next/image";
+
 const ImageWallpaper = () => {
   return (
     <div className="h-80  w-full relative">
-      <img
+      <Image
+        height={320}
+        width={1200}
         src="/img/wallpaper/1.jpg"
         className="h-80 w-full object-cover object-center rounded-xl"
         alt=""

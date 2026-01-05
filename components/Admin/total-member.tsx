@@ -3,6 +3,7 @@
 import { useAsyncEffect } from "@/hooks/useAsyncEffect";
 import { createClient } from "@/lib/supabase/client";
 import { ProfileType } from "@/types/db";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 const supabase = createClient();
 
@@ -20,7 +21,9 @@ const TotalMember = () => {
         {!isLoading &&
           members?.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2">
-              <img
+              <Image
+                width={48}
+                height={48}
                 src={item.avatar_url ? item.avatar_url : "/img/logo.webp"}
                 className="lg:size-12 size-10"
                 alt=""

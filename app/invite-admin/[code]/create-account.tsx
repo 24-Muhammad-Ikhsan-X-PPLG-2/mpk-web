@@ -185,7 +185,7 @@ const CreateAccount: FC<CreateAccountProps> = ({ code }) => {
                   disabled={isLoading}
                   className="bg-primary not-disabled:hover:scale-105 transition duration-150 not-disabled:hover:-translate-y-1 not-disabled:active:scale-95 text-white font-semibold text-lg cursor-pointer w-full h-12 rounded-xl text-center disabled:bg-neutral-500 disabled:cursor-not-allowed"
                 >
-                  Submit
+                  {isLoading ? "Loading..." : "Submit"}
                 </button>
               </div>
             </div>

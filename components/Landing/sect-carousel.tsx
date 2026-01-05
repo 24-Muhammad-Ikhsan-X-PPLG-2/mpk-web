@@ -2,6 +2,7 @@
 import { SeminarPhotoType } from "@/types/db";
 import { ArrowLeft, ArrowRight, Download } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
 import { FC, useState } from "react";
 
 type SectCarouselProps = {
@@ -51,17 +52,22 @@ const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
               </>
             )}
             <AnimatePresence mode="wait">
-              <motion.img
+              <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ duration: 0.5 }}
                 key={`img-${currentImg}`}
-                src={img[currentImg - 1].img_url}
-                className="lg:w-[450px] lg:h-[600px] w-[300px] h-[400px] object-cover object-center rounded-xl"
-                loading="lazy"
-                alt=""
-              />
+              >
+                <Image
+                  width={450}
+                  height={600}
+                  src={img[currentImg - 1].img_url}
+                  className="lg:w-[450px] lg:h-[600px] w-[300px] h-[400px] object-cover object-center rounded-xl"
+                  loading="lazy"
+                  alt=""
+                />
+              </motion.div>
             </AnimatePresence>
             <div className="bg-black/50 absolute md:bottom-5 bottom-3 left-3 md:left-5 backdrop-blur-md cursor-pointer p-3 rounded-full z-1">
               <a href={img[currentImg - 1].img_url} download={true}>
@@ -93,12 +99,16 @@ const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
           teoretis dan keterampilan prakits serta wawasan terkini kepada audiens
           luas melalui presentasi ahli.
         </p>
-        <img
+        <Image
+          width={256}
+          height={256}
           src="/img/kanan-atas.webp"
           className="absolute top-0 right-0 md:w-64 w-32  md:rounded-tr-[50px] rounded-tr-xl"
           alt=""
         />
-        <img
+        <Image
+          width={256}
+          height={256}
           src="/img/kiri-bawah.webp"
           className="absolute bottom-0 left-0 md:w-64 w-32 md:rounded-bl-[50px] rounded-bl-xl"
           alt=""

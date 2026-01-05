@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "motion/react";
+import Image from "next/image";
 
 const HeroSection = () => {
   return (
@@ -93,7 +94,10 @@ const HeroSection = () => {
         </div>
         <div className="lg:order-2 relative w-fit">
           <div className="absolute hidden md:block inset-0 backdrop-blur-md bg-white/50 rounded-full"></div>
-          <img
+          <Image
+            alt="Logo"
+            width={400}
+            height={400}
             src={"/img/logo.webp"}
             className="w-60 h-60 lg:w-100 lg:h-100 md:w-50 md:h-50 md:opacity-75 rounded-full shadow-2xl"
           />

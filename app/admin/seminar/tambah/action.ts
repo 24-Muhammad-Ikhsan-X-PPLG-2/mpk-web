@@ -10,17 +10,34 @@ export async function AddSeminar(formData: FormData) {
   const deskripsi = formData.get("deskripsi") as string;
   const tgl = formatTanggalLengkap(formData.get("tgl") as string);
   const img_path = formData.get("img_path") as string;
-
-  const { error } = await supabase.from("seminar_photo").insert({
-    img_url: img_path,
-    name,
-    deskripsi,
-    tgl,
-  });
-  if (error) {
+  if (!name || !tgl || !img_path) {
     return {
-      error: error.message,
+      error: "Bad request!",
     };
   }
-  return redirect(`/admin/`);
+  try {
+    const { error } = await supabase.from("seminar_photo").insert({
+      img_url: img_path,
+      name,
+      deskripsi,
+      tgl,
+    });
+    if (error) {
+      return {
+        error: error.message,
+      };
+    }
+    return {
+      error: null,
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        error: error.message,
+      };
+    }
+    return {
+      error: "Unexpected error!",
+    };
+  }
 }

@@ -2,6 +2,7 @@ import React from "react";
 import Instagram from "../Icons/Instagram";
 import Youtube from "../Icons/Youtube";
 import Tiktok from "../Icons/Tiktok";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -9,12 +10,16 @@ const Footer = () => {
       <div className="flex w-full justify-between">
         <div>
           <div className="flex gap-4">
-            <img
+            <Image
+              width={100}
+              height={100}
               src="/img/smk-logo.webp"
               className="lg:w-24 w-12 object-cover object-center"
               alt=""
             />
-            <img
+            <Image
+              width={100}
+              height={100}
               src="/img/logo.webp"
               className="lg:w-24 w-12 object-cover object-center"
               alt=""
