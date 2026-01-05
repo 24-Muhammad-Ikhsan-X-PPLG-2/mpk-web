@@ -6,7 +6,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { SignIn } from "./action";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 
@@ -25,6 +25,7 @@ const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorSupabase, setErrorSupabase] = useState("");
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -55,6 +56,7 @@ const Signin = () => {
         setErrorSupabase(error);
       }
     }
+    router.push("/admin");
   };
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);

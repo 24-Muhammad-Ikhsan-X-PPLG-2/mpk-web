@@ -46,7 +46,6 @@ const LogoutModal: FC<LogoutModalProps> = ({ setShow, show }) => {
       return;
     }
     await supabase.auth.signOut();
-    setIsLoading(false);
     router.push("/signin");
   };
   const handleCloseModal = () => {
