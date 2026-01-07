@@ -1,18 +1,13 @@
 "use client";
-import { useAsyncEffect } from "@/hooks/useAsyncEffect";
-import { createClient } from "@/lib/supabase/client";
+import { fetchTotalAdmin } from "@/lib/client/utils";
+import { useQuery } from "@tanstack/react-query";
 import { Users } from "lucide-react";
-import React, { useEffect, useState } from "react";
 
-const supabase = createClient();
 const TotalAdmin = () => {
-  const [total, setTotal] = useState(0);
-  const { isLoading } = useAsyncEffect(async () => {
-    const { data } = await supabase.from("profiles").select();
-    if (data) {
-      setTotal(data.length);
-    }
-  }, []);
+  const { isLoading, data } = useQuery({
+    queryKey: ["total-admin"],
+    queryFn: fetchTotalAdmin,
+  });
   return (
     <div className="bg-white shadow w-full rounded-xl gap-2 flex items-center p-3">
       <div className="bg-neutral-300 p-2 rounded-full">
@@ -23,7 +18,7 @@ const TotalAdmin = () => {
           Total Admin
         </p>
         <p className="text-black font-medium lg:text-base text-xs">
-          {isLoading ? "Loading..." : total}
+          {isLoading ? "Loading..." : data}
         </p>
       </div>
     </div>

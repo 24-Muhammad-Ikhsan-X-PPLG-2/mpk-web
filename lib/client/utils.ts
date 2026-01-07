@@ -1,5 +1,9 @@
 "use client";
+import { ProfileType, SeminarPhotoType } from "@/types/db";
 import { createClient } from "../supabase/client";
+import { PostgrestResponse } from "@supabase/supabase-js";
+
+const supabase = createClient();
 
 export const formatTanggalLengkap = (dateString: string) => {
   if (!dateString) return "";
@@ -64,7 +68,6 @@ export const formatTanggalIndoKeSistem = (dateString: string): string => {
 };
 
 export async function UploadGambarSeminar(gambar: File) {
-  const supabase = createClient();
   const fileExt = gambar.name.split(".").pop();
   const fileName = `${crypto.randomUUID()}.${fileExt}`;
   const { data: DataStorage, error: ErrorStorage } = await supabase.storage
@@ -86,7 +89,6 @@ export async function UploadGambarSeminar(gambar: File) {
 }
 
 export async function HapusGambarSeminar(fullPath: string) {
-  const supabase = createClient();
   const path = new URL(fullPath).pathname.split("/seminar/")[1];
   const { error } = await supabase.storage.from("seminar").remove([path]);
   if (error) {
@@ -98,3 +100,27 @@ export async function HapusGambarSeminar(fullPath: string) {
     error: null,
   };
 }
+
+export const fetchMembers: () => Promise<ProfileType[] | null> = async () => {
+  const { data } = (await supabase
+    .from("profiles")
+    .select()) as PostgrestResponse<ProfileType>;
+  return data;
+};
+
+export const fetchTotalAdmin = async (): Promise<number> => {
+  const { data } = (await supabase
+    .from("profiles")
+    .select()) as PostgrestResponse<ProfileType>;
+  if (data) {
+    return data.length;
+  }
+  return 0;
+};
+
+export const fetchSeminars = async (): Promise<SeminarPhotoType[] | null> => {
+  const { data } = (await supabase
+    .from("seminar_photo")
+    .select()) as PostgrestResponse<SeminarPhotoType>;
+  return data;
+};

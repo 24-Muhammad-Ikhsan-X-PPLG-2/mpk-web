@@ -1,25 +1,20 @@
 "use client";
 
-import { useAsyncEffect } from "@/hooks/useAsyncEffect";
-import { createClient } from "@/lib/supabase/client";
-import { ProfileType } from "@/types/db";
+import { fetchMembers } from "@/lib/client/utils";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-const supabase = createClient();
 
 const TotalMember = () => {
-  const [members, setMembers] = useState<ProfileType[] | null>(null);
-
-  const { isLoading } = useAsyncEffect(async () => {
-    const { data } = await supabase.from("profiles").select();
-    setMembers(data);
-  }, []);
+  const { data, isLoading } = useQuery({
+    queryKey: ["members"],
+    queryFn: fetchMembers,
+  });
   return (
     <div className="bg-white p-5 shadow w-full h-80 max-h-80 overflow-y-auto rounded-xl">
       <p className="text-gray-600 text-base font-semibold">Team Member</p>
       <div className="flex flex-col w-full gap-5 mt-5">
         {!isLoading &&
-          members?.map((item, idx) => (
+          data?.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2">
               <Image
                 width={48}
