@@ -14,28 +14,15 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { TambahAkunServerAction } from "./action-tambah";
 import ErrorModal from "@/components/error-modal";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import { FormSchemaTambahUsers } from "@/schema/schema-zod";
 
 type TambahModalProps = {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
 };
 
-const FormSchema = z.object({
-  name: z.string().min(3, {
-    error: "Nama Akun minimal 3 karakter!",
-  }),
-  email: z.email({
-    error: "Email tidak valid!",
-  }),
-  role: z.string().nonempty({
-    error: "Role tidak boleh kosong!",
-  }),
-  password: z.string().min(8, {
-    error: "Password minimal 8 karakter!",
-  }),
-});
-
-type FormSchemaType = z.infer<typeof FormSchema>;
+type FormSchemaType = z.infer<typeof FormSchemaTambahUsers>;
 
 const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +34,7 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
     formState: { errors },
     reset,
   } = useForm<FormSchemaType>({
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(FormSchemaTambahUsers),
     defaultValues: {
       email: "",
       name: "",
@@ -56,19 +43,12 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
     },
   });
   const modalRef = useRef<HTMLFormElement>(null);
+  useClickOutside(modalRef, () => setShowModal(false));
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
   };
   const handleCloseModal = () => setShowModal(false);
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        setShowModal(false);
-      }
-    };
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => window.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+
   const handleTambahAkun: SubmitHandler<FormSchemaType> = async ({
     email,
     name,

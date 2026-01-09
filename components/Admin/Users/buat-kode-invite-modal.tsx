@@ -15,6 +15,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import z from "zod";
 import { BuatKodeInviteServerAction } from "./action-buat-kode";
 import ErrorModal from "@/components/error-modal";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 type BuatKodeInviteModalProps = {
   showModal: boolean;
@@ -49,19 +50,8 @@ const BuatKodeInviteModal: FC<BuatKodeInviteModalProps> = ({
       berapaBanyakOrang: "",
     },
   });
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(e.target as Node) &&
-        !isLoading
-      ) {
-        setShowModal(false);
-      }
-    };
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => window.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(modalRef, () => setShowModal(false));
+  useClickOutside(modalCodeRef, () => setShowModalCode(""));
   useEffect(() => {
     if (!showModal) {
       reset();

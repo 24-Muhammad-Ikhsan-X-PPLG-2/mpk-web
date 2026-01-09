@@ -124,3 +124,17 @@ export const fetchSeminars = async (): Promise<SeminarPhotoType[] | null> => {
     .select()) as PostgrestResponse<SeminarPhotoType>;
   return data;
 };
+
+export const fetchUsers = async (): Promise<ProfileType[] | null> => {
+  const { data } = (await supabase
+    .from("profiles")
+    .select()) as PostgrestResponse<ProfileType>;
+  return data;
+};
+
+export const fetchImages = async (): Promise<SeminarPhotoType[] | null> => {
+  const { data } = (await supabase
+    .from("seminar_photo")
+    .select()) as PostgrestResponse<SeminarPhotoType>;
+  return data;
+};

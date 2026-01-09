@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
 import { DeleteAkunServerAction } from "./action-delete";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 type DeleteUserModalProps = {
   show: string | null;
@@ -20,19 +21,7 @@ const DeleteUserModal: FC<DeleteUserModalProps> = ({
   isLoading,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(e.target as Node) &&
-        !isLoading
-      ) {
-        setShow(null);
-      }
-    };
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => window.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(modalRef, () => setShow(null));
   const handleDeleteItem = async () => {
     if (!show) return;
     const idAccount = show;

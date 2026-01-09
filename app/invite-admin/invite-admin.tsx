@@ -1,60 +1,19 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useInviteAdmin from "@/hooks/useInviteAdmin";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
-
-const formSchema = z.object({
-  code: z.string().nonempty("Kode tidak boleh kosong!"),
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
-
-const supabase = createClient();
 
 const InviteAdmin = () => {
-  const [errorSupabase, setErrorSupabase] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const {
-    register,
+    errorSupabase,
+    errors,
+    handleCloseError,
+    handleCodeVerification,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      code: "",
-    },
-  });
-  const handleCodeVerification: SubmitHandler<FormSchemaType> = async ({
-    code,
-  }) => {
-    setIsLoading(true);
-    setErrorSupabase("");
-    const { error, data } = await supabase
-      .from("invite_code")
-      .select()
-      .eq("code", code)
-      .maybeSingle();
-    if (error) {
-      setErrorSupabase(error.message);
-      setIsLoading(false);
-      return;
-    }
-    if (!data) {
-      setErrorSupabase("Kode undangan salah!");
-      setIsLoading(false);
-      return;
-    }
-    setIsLoading(false);
-    router.push(`/invite-admin/${code}`);
-  };
-  const handleCloseError = () => setErrorSupabase("");
+    isLoading,
+    register,
+  } = useInviteAdmin();
   return (
     <>
       <div className="min-h-screen flex justify-center items-center lg:bg-primary lg:px-4">

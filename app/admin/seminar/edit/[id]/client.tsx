@@ -18,132 +18,65 @@ import ErrorModal from "@/components/error-modal";
 import { useRouter } from "next/navigation";
 import imageCompression from "browser-image-compression";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/client";
+import { PostgrestMaybeSingleResponse } from "@supabase/supabase-js";
+import { useClickOutside } from "@/hooks/useClickOutside";
+import useEditSeminar from "@/hooks/useEditSeminar";
+import { useAsyncEffect } from "@/hooks/useAsyncEffect";
+import Loading from "./loading";
 
 type EditSeminarProps = {
   id: number;
-  seminar: SeminarPhotoType;
 };
 
-const formSchema = z.object({
-  nama: z.string().nonempty({
-    error: "Nama Seminar tidak boleh kosong!",
-  }),
-  deskripsi: z.string(),
-  tgl: z.string().nonempty({
-    error: "Tanggal tidak boleh kosong!",
-  }),
-});
+const supabase = createClient();
 
-type FormSchemaType = z.infer<typeof formSchema>;
+const fetchSeminar = async (id: number): Promise<SeminarPhotoType | null> => {
+  const { data } = (await supabase
+    .from("seminar_photo")
+    .select()
+    .eq("id", id)
+    .maybeSingle()) as PostgrestMaybeSingleResponse<SeminarPhotoType>;
+  return data;
+};
 
-const EditSeminar: FC<EditSeminarProps> = ({ id, seminar }) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [fullscreenImg, setFullscreenImg] = useState(false);
-  const [errorEdit, setErrorEdit] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const router = useRouter();
+const EditSeminar: FC<EditSeminarProps> = ({ id }) => {
+  const [seminar, setSeminar] = useState<SeminarPhotoType | null>(null);
   const {
-    register,
+    errorEdit,
+    errors,
+    fullscreenImg,
+    handleFileChange,
+    handleOnEditSeminar,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      deskripsi: seminar.deskripsi ?? "",
-      nama: seminar.name,
-      tgl: formatTanggalIndoKeSistem(seminar.tgl),
-    },
-  });
+    isLoading,
+    isSuccess,
+    previewUrl,
+    register,
+    setFullscreenImg,
+    setErrorEdit,
+    router,
+  } = useEditSeminar({ id, seminar });
   const fullscreenImgRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (
-        fullscreenImgRef.current &&
-        !fullscreenImgRef.current.contains(e.target as Node)
-      ) {
-        setFullscreenImg(false);
-      }
-    };
-    window.addEventListener("mousedown", handleOutsideClick);
-    return () => window.removeEventListener("mousedown", handleOutsideClick);
+  useClickOutside(fullscreenImgRef, () => setFullscreenImg(false));
+  const { isLoading: isLoadingSeminar } = useAsyncEffect(async () => {
+    const dataSeminar = await fetchSeminar(id);
+    if (!dataSeminar) {
+      router.push("/admin");
+      return;
+    }
+    setSeminar(dataSeminar);
   }, []);
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      if (!selectedFile.type.startsWith("image/")) {
-        alert("Tolong pilihnya file gambar!!!");
-        return;
-      }
-      setSelectedFile(selectedFile);
-      const url = URL.createObjectURL(selectedFile);
-      setPreviewUrl(url);
-    }
-  };
-  const handleOnEditSeminar: SubmitHandler<FormSchemaType> = async ({
-    deskripsi,
-    nama,
-    tgl,
-  }) => {
-    let img_path = seminar.img_url;
-    setIsLoading(true);
-    setIsSuccess(false);
-    if (selectedFile) {
-      let fileToUpload = selectedFile;
-      if (selectedFile.type !== "image/webp") {
-        console.log("Mengompres gambar...");
-        const compressBlob = await imageCompression(selectedFile, {
-          maxSizeMB: 0.8,
-          maxWidthOrHeight: 1200,
-          useWebWorker: true,
-          fileType: "image/webp",
-        });
-        console.log("Pengompresan gambar selesai.");
-        const compressedFile = new File([compressBlob], "image.webp", {
-          type: "image/webp",
-        });
-        fileToUpload = compressedFile;
-      }
-      const { error: ErrorUpload, path } = await UploadGambarSeminar(
-        fileToUpload
-      );
-      if (ErrorUpload) {
-        setErrorEdit(ErrorUpload);
-        setIsLoading(false);
-        return;
-      }
-      if (!path) {
-        setErrorEdit("Unknown error");
-        setIsLoading(false);
-        return;
-      }
-      img_path = path;
-      const { error: ErrorHapus } = await HapusGambarSeminar(seminar.img_url);
-      if (ErrorHapus) {
-        setErrorEdit(ErrorHapus);
-        setIsLoading(false);
-        return;
-      }
-    }
-    const formData = new FormData();
-    formData.set("name", nama);
-    formData.set("deskripsi", deskripsi);
-    formData.set("tgl", tgl);
-    formData.set("id", id.toString());
-    formData.set("img_path", img_path);
-
-    const { error } = await editSeminar(formData);
-    if (error) {
-      setErrorEdit(error);
-    }
-    setIsLoading(false);
-    router.refresh();
-    setIsSuccess(true);
-    setTimeout(() => {
-      setIsSuccess(false);
-    }, 1500);
-  };
+  if (!seminar && isLoadingSeminar) {
+    return <Loading />;
+  }
+  if (!seminar) {
+    return (
+      <>
+        <div>Not Found</div>
+      </>
+    );
+  }
   return (
     <>
       <ErrorModal errorDelete={errorEdit} setErrorDelete={setErrorEdit} />

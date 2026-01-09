@@ -1,16 +1,17 @@
 "use client";
-import { SeminarPhotoType } from "@/types/db";
+import { fetchImages } from "@/lib/client/utils";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Download } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import { FC, useState } from "react";
+import { useState } from "react";
 
-type SectCarouselProps = {
-  img: SeminarPhotoType[] | null;
-};
-
-const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
+const SectCarousel = () => {
   const [currentImg, setCurrentImg] = useState(1);
+  const { isLoading, data: img } = useQuery({
+    queryKey: ["img_home"],
+    queryFn: fetchImages,
+  });
   const handleNextImg = () => {
     if (!img) return;
     if (currentImg == img.length) {
@@ -33,7 +34,7 @@ const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
         <p className="md:text-4xl relative z-10 text-2xl text-white font-bold mt-12 text-center">
           Info Seminar & Workshop
         </p>
-        {img && (
+        {img && !isLoading ? (
           <div className="flex mt-16 gap-6 items-center relative overflow-hidden z-10">
             {img.length !== 1 && (
               <>
@@ -77,7 +78,7 @@ const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
             <div className="absolute bottom-0 w-full h-20 flex justify-center items-center">
               <div className="bg-black/50 w-fit flex justify-center items-center backdrop-blur-sm  h-5 p-3 rounded-xl">
                 <div className="flex gap-2">
-                  {img.map((item, idx) => {
+                  {img.map((_, idx) => {
                     const id = ++idx;
                     return (
                       <div
@@ -93,6 +94,16 @@ const SectCarousel: FC<SectCarouselProps> = ({ img }) => {
               </div>
             </div>
           </div>
+        ) : (
+          <Image
+            width={450}
+            height={600}
+            src={"https://placehold.co/450x600?text=Loading"}
+            className="lg:w-[450px] lg:h-[600px] w-[300px] h-[400px] object-cover object-center rounded-xl mt-16"
+            loading="lazy"
+            alt=""
+            unoptimized
+          />
         )}
         <p className="text-white relative z-10 font-bold lg:text-2xl md:text-xl text-lg text-center w-[90%] mt-16 mb-16">
           Tujuan seminar & workshop adalah untuk menyebarkan pengetahuan

@@ -1,4 +1,5 @@
 "use client";
+import { useClickOutside } from "@/hooks/useClickOutside";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
@@ -15,15 +16,7 @@ const PreviewModal: FC<PreviewModalProps> = ({
   previewUrl,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        setPreviewModal(false);
-      }
-    };
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => window.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(modalRef, () => setPreviewModal(false));
   return (
     <AnimatePresence>
       {previewModal && (

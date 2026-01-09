@@ -1,8 +1,6 @@
 "use client";
 
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { DeleteAkunServerAction } from "./action-delete";
-
+import { Dispatch, FC, SetStateAction } from "react";
 type ButtonDeleteUserProps = {
   setShowModalDelete: Dispatch<SetStateAction<null | string>>;
   isLoading: boolean;

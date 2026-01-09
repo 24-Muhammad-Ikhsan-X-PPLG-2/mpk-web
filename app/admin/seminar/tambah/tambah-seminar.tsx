@@ -1,136 +1,31 @@
 "use client";
 import AdminLayout from "@/components/Admin/layout/AdminLayout";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Maximize, Pencil, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
-import { AddSeminar } from "./action";
-import { createClient } from "@/lib/supabase/client";
+import { useRef } from "react";
 import ErrorModal from "@/components/error-modal";
-import { UploadGambarSeminar } from "@/lib/client/utils";
-import imageCompression from "browser-image-compression";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-
-const formSchema = z.object({
-  nama: z.string().nonempty({
-    error: "Nama Seminar tidak boleh kosong!",
-  }),
-  deskripsi: z.string(),
-  tgl: z.string().nonempty({
-    error: "Tanggal tidak boleh kosong!",
-  }),
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
+import { useClickOutside } from "@/hooks/useClickOutside";
+import useTambahSeminar from "@/hooks/useTambahSeminar";
 
 const TambahSeminar = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [fullscreenImg, setFullscreenImg] = useState(false);
-  const [errorImg, setErrorImg] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const {
-    register,
+    setFullscreenImg,
+    errorImg,
+    errors,
+    fullscreenImg,
+    handleFileChange,
+    handleMaximizeImg,
+    handleOnTambahSeminar,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      deskripsi: "",
-      nama: "",
-      tgl: "",
-    },
-  });
+    isLoading,
+    register,
+    setErrorImg,
+    previewUrl,
+  } = useTambahSeminar();
   const fullscreenImgRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (
-        fullscreenImgRef.current &&
-        !fullscreenImgRef.current.contains(e.target as Node)
-      ) {
-        setFullscreenImg(false);
-      }
-    };
-    window.addEventListener("mousedown", handleOutsideClick);
-    return () => window.removeEventListener("mousedown", handleOutsideClick);
-  }, []);
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    setErrorImg("");
-    if (selectedFile) {
-      if (!selectedFile.type.startsWith("image/")) {
-        setErrorImg("File harus berupa gambar");
-        return;
-      }
-      setSelectedFile(selectedFile);
-      const url = URL.createObjectURL(selectedFile);
-      setPreviewUrl(url);
-    }
-  };
-  const handleOnTambahSeminar: SubmitHandler<FormSchemaType> = async ({
-    deskripsi,
-    nama,
-    tgl,
-  }) => {
-    setErrorImg("");
-    setIsLoading(true);
-    if (!selectedFile) {
-      setErrorImg("Image Seminar tidak boleh kosong!");
-      setIsLoading(false);
-      return;
-    }
-    let fileToUpload = selectedFile;
-    if (selectedFile.type !== "image/webp") {
-      console.log("Mengompres gambar...");
-      const compressBlob = await imageCompression(selectedFile, {
-        maxSizeMB: 0.8,
-        maxWidthOrHeight: 1200,
-        useWebWorker: true,
-        fileType: "image/webp",
-      });
-      console.log("Pengompresan gambar selesai.");
-      const compressedFile = new File([compressBlob], "image.webp", {
-        type: "image/webp",
-      });
-      fileToUpload = compressedFile;
-    }
-    const { path, error: ErrorUpload } = await UploadGambarSeminar(
-      fileToUpload
-    );
-    if (ErrorUpload) {
-      setErrorImg(ErrorUpload);
-      setIsLoading(false);
-      return;
-    }
-    if (!path) {
-      setErrorImg("Unknown Error");
-      setIsLoading(false);
-      return;
-    }
-    const formData = new FormData();
-    formData.set("name", nama);
-    formData.set("deskripsi", deskripsi);
-    formData.set("tgl", tgl);
-    formData.set("img_path", path);
-    const { error } = await AddSeminar(formData);
-    if (error) {
-      setErrorImg(error);
-      setIsLoading(false);
-      return;
-    }
-    router.push("/admin");
-  };
-  const handleMaximizeImg = (state: boolean) => {
-    if (!previewUrl) {
-      setErrorImg("Masukkan gambar terlebih dahulu!");
-      return;
-    }
-    setFullscreenImg(state);
-  };
+  useClickOutside(fullscreenImgRef, () => setFullscreenImg(false));
+
   return (
     <>
       <ErrorModal errorDelete={errorImg} setErrorDelete={setErrorImg} />

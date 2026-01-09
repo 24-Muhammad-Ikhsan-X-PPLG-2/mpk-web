@@ -1,73 +1,27 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { FC, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
-import { CreateAccountServerAction } from "./action-create-account";
-import { useRouter } from "next/navigation";
+import { FC } from "react";
 import Image from "next/image";
-
-const formSchema = z.object({
-  username: z
-    .string()
-    .nonempty("Username tidak boleh kosong")
-    .min(3, "Username minimal 3 karakter!"),
-  email: z.email("Email tidak valid!").nonempty("Email tidak boleh kosong!"),
-  password: z
-    .string()
-    .nonempty("Password tidak boleh kosong!")
-    .min(8, "Password minimal 8 karakter!"),
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
+import useCreateAccountFromCode from "@/hooks/useCreateAccountFromCode";
 
 type CreateAccountProps = {
   code: string;
 };
 
 const CreateAccount: FC<CreateAccountProps> = ({ code }) => {
-  const [errorSupabase, setErrorSupabase] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const {
-    register,
+    errorSupabase,
+    errors,
+    handleCloseError,
+    handleCreateAccount,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      username: "",
-    },
-  });
-  const handleCreateAccount: SubmitHandler<FormSchemaType> = async ({
-    email,
-    password,
-    username,
-  }) => {
-    setErrorSupabase("");
-    setIsLoading(true);
-    const formData = new FormData();
-    formData.set("email", email);
-    formData.set("username", username);
-    formData.set("password", password);
-    formData.set("code", code);
-    const { error } = await CreateAccountServerAction(formData);
-    if (error) {
-      setErrorSupabase(error);
-      setIsLoading(false);
-      return;
-    }
-    setIsLoading(false);
-    router.push("/signin");
-  };
-  const handleCloseError = () => setErrorSupabase("");
-  const handleTogglePassword = () => setShowPassword((prev) => !prev);
+    handleTogglePassword,
+    isLoading,
+    register,
+    showPassword,
+  } = useCreateAccountFromCode({ code });
   return (
     <>
       <div className="min-h-screen flex justify-center items-center lg:bg-[#cf7f4f] lg:px-4">

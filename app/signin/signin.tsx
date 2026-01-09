@@ -1,69 +1,22 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, X } from "lucide-react";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
-import { SignIn } from "./action";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-
-const FormLoginSchema = z.object({
-  email: z.email({
-    error: "Invalid email address!",
-  }),
-  password: z.string().nonempty({
-    error: "Password is required!",
-  }),
-});
-
-type FormLoginSchemaType = z.infer<typeof FormLoginSchema>;
+import useSignin from "@/hooks/useSignin";
 
 const Signin = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorSupabase, setErrorSupabase] = useState("");
-  const router = useRouter();
   const {
-    register,
+    errorSupabase,
+    showPassword,
+    errors,
+    handleCloseError,
+    handleLogin,
     handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm<FormLoginSchemaType>({
-    resolver: zodResolver(FormLoginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-  const handleLogin: SubmitHandler<FormLoginSchemaType> = async ({
-    email,
-    password,
-  }) => {
-    setIsLoading(true);
-    setErrorSupabase("");
-    const formData = new FormData();
-    formData.set("email", email);
-    formData.set("password", password);
-    const { error } = await SignIn(formData);
-    if (error) {
-      setIsLoading(false);
-      if (error === "Invalid login credentials") {
-        setErrorSupabase("Email atau password salah!");
-      } else {
-        setErrorSupabase(error);
-      }
-    }
-    router.push("/admin");
-  };
-  const handleTogglePassword = () => {
-    setShowPassword((prev) => !prev);
-  };
-  const handleCloseError = () => {
-    setErrorSupabase("");
-  };
+    handleTogglePassword,
+    isLoading,
+    register,
+  } = useSignin();
   return (
     <div className="min-h-screen flex justify-center items-center lg:bg-primary lg:px-4">
       <form

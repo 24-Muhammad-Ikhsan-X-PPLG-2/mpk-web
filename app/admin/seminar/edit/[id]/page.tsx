@@ -9,17 +9,8 @@ export const metadata: Metadata = {
 };
 
 const Page = async ({ params }: { params: Promise<{ id: number }> }) => {
-  const supabase = await createClient();
   const { id } = await params;
-  const { data } = await supabase
-    .from("seminar_photo")
-    .select()
-    .eq("id", id)
-    .maybeSingle();
-  if (!data) {
-    redirect("/admin");
-  }
-  return <EditSeminar seminar={data} id={id} />;
+  return <EditSeminar id={id} />;
 };
 
 export default Page;

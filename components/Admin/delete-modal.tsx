@@ -16,6 +16,7 @@ import ErrorModal from "../error-modal";
 import { HapusGambarSeminar } from "@/lib/client/utils";
 import { PostgrestResponse } from "@supabase/supabase-js";
 import { SeminarPhotoType } from "@/types/db";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 export type deleteModalType = {
   id: string;
@@ -34,15 +35,7 @@ const DeleteModal: FC<DeleteModalProps> = ({ setShow, show }) => {
   const [errorDelete, setErrorDelete] = useState("");
   const { changeNoScroll } = useLayout();
   const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        setShow(null);
-      }
-    };
-    window.addEventListener("mousedown", handleOutsideClick);
-    return () => window.removeEventListener("mousedown", handleOutsideClick);
-  }, []);
+  useClickOutside(modalRef, () => setShow(null));
   useEffect(() => {
     if (show) {
       changeNoScroll(true);
