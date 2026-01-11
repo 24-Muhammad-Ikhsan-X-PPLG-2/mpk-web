@@ -60,3 +60,14 @@ export const FormSchemaEditSeminar = z.object({
     error: "Tanggal tidak boleh kosong!",
   }),
 });
+
+export const FormSchemaEditUser = z.object({
+  username: z.string().min(3, "Username minimal 3 karakter!"),
+  role: z.string().nonempty("Role tidak boleh kosong!"),
+  desc: z.string(),
+});
+
+export const FormSchemaBuatKodeInvite = z.object({
+  berapaBanyakOrang: z.string().nonempty("Masukan berapa banyak orang!"),
+  expires: z.string().nonempty("Pilih kedaluwarsa kode!"),
+});

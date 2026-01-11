@@ -16,40 +16,35 @@ import z from "zod";
 import { BuatKodeInviteServerAction } from "./action-buat-kode";
 import ErrorModal from "@/components/error-modal";
 import { useClickOutside } from "@/hooks/useClickOutside";
+import useBuatKodeInviteModal from "@/hooks/useBuatKodeInviteModal";
 
 type BuatKodeInviteModalProps = {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
 };
 
-const formSchema = z.object({
-  berapaBanyakOrang: z.string().nonempty("Masukan berapa banyak orang!"),
-  expires: z.string().nonempty("Pilih kedaluwarsa kode!"),
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
-
 const BuatKodeInviteModal: FC<BuatKodeInviteModalProps> = ({
   setShowModal,
   showModal,
 }) => {
+  const {
+    errorBuatKode,
+    errors,
+    handleBuatKode,
+    handleCloseModal,
+    handleCopyCode,
+    handleSubmit,
+    isLoading,
+    isSuccessCopy,
+    register,
+    reset,
+    setShowModalCode,
+    showModalCode,
+    setErrorBuatKode,
+  } = useBuatKodeInviteModal({ setShowModal });
   const modalRef = useRef<HTMLFormElement>(null);
   const modalCodeRef = useRef<HTMLDivElement>(null);
-  const [showModalCode, setShowModalCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorBuatKode, setErrorBuatKode] = useState("");
-  const [isSuccessCopy, setIsSuccessCopy] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      berapaBanyakOrang: "",
-    },
-  });
+
   useClickOutside(modalRef, () => setShowModal(false));
   useClickOutside(modalCodeRef, () => setShowModalCode(""));
   useEffect(() => {
@@ -57,36 +52,7 @@ const BuatKodeInviteModal: FC<BuatKodeInviteModalProps> = ({
       reset();
     }
   }, [showModal]);
-  const handleBuatKode: SubmitHandler<FormSchemaType> = async ({
-    berapaBanyakOrang,
-    expires,
-  }) => {
-    setIsLoading(true);
-    setErrorBuatKode("");
-    const formData = new FormData();
-    formData.set("banyak_orang", berapaBanyakOrang);
-    formData.set("expires", expires);
-    const { error, code } = await BuatKodeInviteServerAction(formData);
-    if (error) {
-      setErrorBuatKode(error);
-      setShowModal(false);
-      return;
-    }
-    setIsLoading(false);
-    setShowModal(false);
-    setShowModalCode(code ?? "");
-  };
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-  const handleCopyCode = async () => {
-    if (showModalCode.trim() === "") return;
-    await navigator.clipboard.writeText(showModalCode);
-    setIsSuccessCopy(true);
-    setTimeout(() => {
-      setIsSuccessCopy(false);
-    }, 2000);
-  };
+
   return (
     <>
       <ErrorModal

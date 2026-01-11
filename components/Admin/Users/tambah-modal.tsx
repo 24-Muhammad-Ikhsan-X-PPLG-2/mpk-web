@@ -16,32 +16,25 @@ import { TambahAkunServerAction } from "./action-tambah";
 import ErrorModal from "@/components/error-modal";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { FormSchemaTambahUsers } from "@/schema/schema-zod";
+import useTambahUser from "@/hooks/useTambahUser";
 
 type TambahModalProps = {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
 };
 
-type FormSchemaType = z.infer<typeof FormSchemaTambahUsers>;
-
 const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorSubmit, setErrorSubmit] = useState("");
   const {
+    errorSubmit,
+    errors,
     handleSubmit,
+    handleTambahAkun,
+    isLoading,
     register,
-    formState: { errors },
     reset,
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(FormSchemaTambahUsers),
-    defaultValues: {
-      email: "",
-      name: "",
-      role: "",
-      password: "",
-    },
-  });
+    setErrorSubmit,
+  } = useTambahUser({ setShowModal });
   const modalRef = useRef<HTMLFormElement>(null);
   useClickOutside(modalRef, () => setShowModal(false));
   const handleTogglePassword = () => {
@@ -49,30 +42,6 @@ const TambahModal: FC<TambahModalProps> = ({ setShowModal, showModal }) => {
   };
   const handleCloseModal = () => setShowModal(false);
 
-  const handleTambahAkun: SubmitHandler<FormSchemaType> = async ({
-    email,
-    name,
-    password,
-    role,
-  }) => {
-    setIsLoading(true);
-    setErrorSubmit("");
-    const formData = new FormData();
-    formData.set("name", name);
-    formData.set("email", email);
-    formData.set("password", password);
-    formData.set("role", role);
-    const { error } = await TambahAkunServerAction(formData);
-    if (error) {
-      setErrorSubmit(error);
-      setIsLoading(false);
-      setShowModal(false);
-      return;
-    }
-    setIsLoading(false);
-    reset();
-    setShowModal(false);
-  };
   useEffect(() => {
     if (!showModal) {
       reset();
